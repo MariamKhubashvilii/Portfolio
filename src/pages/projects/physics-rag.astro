@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoImage = '/screenshots/physics-rag.png';
+---
+
+<ProjectDetail
+  title="Physics RAG"
+  description="A research assistant over physics papers and textbooks. Upload PDFs or link arXiv articles, then get grounded, citation-aware answers while you learn."
+  tags={['RAG', 'ChromaDB', 'FastAPI', 'React']}
+  github="https://github.com/MariamKhubashvilii/Physics-Chatbot"
+  accent="blue"
+  demoImage={demoImage}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Physics RAG lets physics students research across multiple authoritative sources at once. Upload PDFs or paste an arXiv link, ask a question, and the system synthesizes an answer from textbooks like Griffiths, Feynman, and Carroll — plus your own notes — with exact sources and page numbers.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Grounded answers</strong>
+          <p>Every response is backed by retrieved passages and includes precise citations and page references, so you can verify what you learn.</p>
+        </div>
+        <div>
+          <strong>Flexible input</strong>
+          <p>Combine textbooks, uploaded PDFs, and direct arXiv URLs into a single searchable knowledge base.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Document ingestion from PDFs and arXiv links.</li>
+        <li>Vector embeddings with semantic search and reranking.</li>
+        <li>Citation-aware answer generation grounded in sources.</li>
+        <li>Full-stack build: FastAPI backend, React frontend.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        Documents are loaded through PDF and arXiv fetching modules, chunked into manageable segments, and embedded using sentence-transformers. When you ask a question, ChromaDB retrieves the relevant passages, a reranker prioritizes the most pertinent ones, and Groq's LLM generates an answer grounded in those retrieved sources.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Load PDFs and fetch arXiv papers</li>
+            <li>Chunk and embed with sentence-transformers</li>
+            <li>Retrieve from ChromaDB, then rerank</li>
+            <li>Generate cited answers via Groq</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Tech stack</h3>
+          <ul>
+            <li>Backend: FastAPI (Python)</li>
+            <li>Frontend: React + Vite</li>
+            <li>Vector store: ChromaDB</li>
+            <li>Embeddings: sentence-transformers; LLM: Groq</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      For the backend, create a virtual environment, install dependencies from <code>requirements.txt</code>, add your Groq API key to <code>.env</code>, then run <code>uvicorn backend.main:app --reload</code>. For the frontend, move into the frontend directory, install npm dependencies, and run <code>npm run dev</code>.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Setup</strong>
+        <p>Python environment, Groq API key, and Node for the React frontend.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Physics students who want grounded, citable answers while studying.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

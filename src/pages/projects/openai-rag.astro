@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/openai-rag-demo.mov';
+---
+
+<ProjectDetail
+  title="OpenAI RAG"
+  description="Retrieval-Augmented Generation chatbot using OpenAI embeddings and semantic search for intelligent document retrieval."
+  tags={['RAG', 'OpenAI', 'AI']}
+  github="https://github.com/MariamKhubashvilii/openai-rag"
+  accent="purple"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        A small RAG project that lets you ask questions about a PDF. It turns the document into embeddings, finds the most relevant chunks for your question via cosine similarity, and sends those chunks to the chat model as context — so answers come from the document, not model guessing.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Document-grounded answers</strong>
+          <p>Chunks + question go to the chat model together, keeping responses tied to source material.</p>
+        </div>
+        <div>
+          <strong>Chat history</strong>
+          <p>Basic conversation memory so follow-up questions work better across the session.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>PDF text extraction and chunking.</li>
+        <li>OpenAI embeddings for semantic search.</li>
+        <li>Cosine similarity retrieval over chunks.</li>
+        <li>Context-augmented chat with conversation history.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        Load a PDF from <code>data/document.pdf</code>, split into chunks, embed each chunk with OpenAI embeddings. When you ask a question, embed the query, find closest chunks by cosine similarity, and pass them plus your question to the chat model. The notebook ends with a simple chat loop.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Load PDF and extract text</li>
+            <li>Split text into chunks</li>
+            <li>Create embeddings per chunk</li>
+            <li>Embed question → cosine similarity search</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Built with</h3>
+          <ul>
+            <li>OpenAI API (embeddings + chat)</li>
+            <li>NumPy for similarity math</li>
+            <li>PyPDF for document loading</li>
+            <li>tiktoken for token counting</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Install dependencies with <code>pip install -r requirements.txt</code>, create a <code>.env</code> with your <code>OPENAI_API_KEY</code>, add your PDF to <code>data/document.pdf</code>, and run the <code>openai-rag.ipynb</code> notebook top to bottom.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Setup</strong>
+        <p>OpenAI API key, PDF in <code>data/</code> folder, Jupyter notebook.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Learning RAG fundamentals with a minimal, readable pipeline.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

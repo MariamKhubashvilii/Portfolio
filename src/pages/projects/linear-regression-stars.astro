@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoImage = '/screenshots/linear-regression-stars.png';
+---
+
+<ProjectDetail
+  title="Linear Regression Star Types"
+  description="Beginner-friendly linear regression project using star data, covering OLS, gradient descent, SGD, Ridge, Lasso, and Elastic Net."
+  tags={['ML', 'Linear Regression', 'Data Science']}
+  github="https://github.com/MariamKhubashvilii/Linear-Regression-Star-Types"
+  accent="emerald"
+  demoImage={demoImage}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        A beginner-friendly notebook that walks through linear regression methods using a star dataset from Kaggle. The goal is not the most advanced prediction model — it is to show different ways to fit linear regression and explain what happens behind the code.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Manual to library</strong>
+          <p>Covers OLS by hand, gradient descent from scratch, stochastic gradient descent, and regularized methods — then compares with scikit-learn.</p>
+        </div>
+        <div>
+          <strong>Log transforms</strong>
+          <p>Uses <code>log10()</code> on radius, temperature, and luminosity where raw values span enormous ranges.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Relationship checking before modeling.</li>
+        <li>OLS linear regression calculated manually.</li>
+        <li>Gradient descent and SGD implemented from scratch.</li>
+        <li>Ridge, Lasso, and Elastic Net regularization.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The dataset contains star physical properties — temperature, luminosity, radius, absolute magnitude, color, spectral class, and star type. The notebook uses log-transformed features to make relationships readable, then fits <code>log_luminosity</code> as the target through multiple regression approaches.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Methods covered</h3>
+          <ul>
+            <li>Ordinary Least Squares (manual)</li>
+            <li>Gradient descent from scratch</li>
+            <li>Stochastic gradient descent</li>
+            <li>Ridge, Lasso, Elastic Net</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Features used</h3>
+          <ul>
+            <li><code>log_radius</code></li>
+            <li><code>log_temperature</code></li>
+            <li><code>log_luminosity</code> (target)</li>
+            <li>Dataset: Kaggle star dataset</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repo, download the <a href="https://www.kaggle.com/datasets/deepu1109/star-dataset" target="_blank" rel="noopener noreferrer">Kaggle star dataset</a>, and open the notebook. Step-by-step explanations are written for readers following along with a blog post.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Focus</strong>
+        <p>Understanding regression mechanics, not production ML pipelines.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Students and self-learners who want to see math and code side by side.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

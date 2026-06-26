@@ -1,0 +1,92 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/physics-motion-demo.mp4';
+---
+
+<ProjectDetail
+  title="Physics Motion"
+  description="A hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall."
+  tags={['Python', 'Physics', 'Simulation']}
+  github="https://github.com/MariamKhubashvilii/Physics-Motion"
+  accent="mint"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Physics Motion is a learning-focused simulator about motion, free fall, and basic physics concepts — controlled entirely through webcam hand tracking. Spawn objects, throw them, watch gravity, bouncing, and energy change in real time.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Gesture control</strong>
+          <p>Point to grab and throw, pinch to spawn, fist to delete, open palm to pause, peace sign to toggle 2D/3D.</p>
+        </div>
+        <div>
+          <strong>Live physics HUD</strong>
+          <p>On-screen display for gesture, mode, speed, kinetic energy, potential energy, and motion trails.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Real-time hand tracking with MediaPipe.</li>
+        <li>Gravity, free fall, bouncing, and ground friction.</li>
+        <li>Object collisions and motion trails.</li>
+        <li>Toggle between 2D and 3D simulation views.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The webcam loop in <code>main.py</code> processes gestures from <code>gestures.py</code>, updates object motion in <code>physics_engine.py</code>, and renders through <code>renderer.py</code>. Hand landmarks come from <code>hand_tracker.py</code> via MediaPipe.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Hand controls</h3>
+          <ul>
+            <li>Point — grab and throw an object</li>
+            <li>Pinch — spawn a new object</li>
+            <li>Fist — delete the nearest object</li>
+            <li>Open palm — pause or resume</li>
+            <li>Peace sign — toggle 2D / 3D mode</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Physics ideas</h3>
+          <ul>
+            <li>Free fall and gravity</li>
+            <li>Velocity and acceleration</li>
+            <li>Bouncing and friction</li>
+            <li>Kinetic and potential energy</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repo, install dependencies, and run <code>python main.py</code>. A webcam is required for gesture interaction. Press <code>Q</code> to quit.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Dependencies</strong>
+        <p>opencv-python, mediapipe, numpy</p>
+      </div>
+      <div>
+        <strong>Recommended</strong>
+        <p>Python 3.10+, webcam, and good lighting.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

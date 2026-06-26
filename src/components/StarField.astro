@@ -1,0 +1,85 @@
+---
+// StarField.astro — ambient canvas star background
+---
+
+<canvas id="starfield"></canvas>
+
+<style>
+  #starfield {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+
+<script>
+  const canvas = document.getElementById('starfield') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  interface Star {
+    x: number; y: number; r: number;
+    alpha: number; speed: number; phase: number;
+    drift: number;
+  }
+
+  const stars: Star[] = Array.from({ length: 220 }, () => ({
+    x:     Math.random() * window.innerWidth,
+    y:     Math.random() * window.innerHeight,
+    r:     Math.pow(Math.random(), 2) * 1.6 + 0.2,
+    alpha: Math.random() * 0.5 + 0.1,
+    speed: Math.random() * 0.004 + 0.001,
+    phase: Math.random() * Math.PI * 2,
+    drift: (Math.random() - 0.5) * 0.06,
+    parallax: 0.3 + Math.random() * 0.4,
+  }));
+
+  // A handful of larger, brighter stars
+  for (let i = 0; i < 12; i++) {
+    stars.push({
+      x:     Math.random() * window.innerWidth,
+      y:     Math.random() * window.innerHeight,
+      r:     1.8 + Math.random() * 0.8,
+      alpha: 0.6 + Math.random() * 0.4,
+      speed: Math.random() * 0.002 + 0.001,
+      phase: Math.random() * Math.PI * 2,
+      drift: (Math.random() - 0.5) * 0.02,
+      parallax: 0.25 + Math.random() * 0.3,
+    });
+  }
+
+  let t = 0;
+  let lastScroll = window.scrollY;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    t += 0.01;
+    const scrollY = window.scrollY || 0;
+    const scrollOffset = scrollY * 0.3; // parallax factor for stars
+
+    stars.forEach(s => {
+      // Very gentle drift
+      s.x += s.drift;
+      if (s.x < 0) s.x = canvas.width;
+      if (s.x > canvas.width) s.x = 0;
+
+      const y = ((s.y - scrollOffset * s.parallax) % canvas.height + canvas.height) % canvas.height;
+      const a = s.alpha * (0.4 + 0.6 * Math.sin(t * s.speed * 80 + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${a})`;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>

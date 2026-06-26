@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoImage = '/screenshots/superstore-profitability.png';
+---
+
+<ProjectDetail
+  title="Superstore Profitability Analysis"
+  description="Exploratory data analysis and binary classification on the Sample Superstore dataset."
+  tags={['Data Science', 'Classification', 'EDA']}
+  github="https://github.com/MariamKhubashvilii/Superstore-Profitability-Analysis"
+  accent="pink"
+  demoImage={demoImage}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        A full exploratory analysis of the Sample Superstore dataset followed by binary classification to predict order profitability. The project traces which factors drive losses and builds a Random Forest model that reaches 94% accuracy.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Key finding</strong>
+          <p>Discount is the single strongest driver of unprofitability — feature importance of 0.60 in the classifier.</p>
+        </div>
+        <div>
+          <strong>Category insight</strong>
+          <p>Tables and Bookcases generate negative total profit regardless of region; the Central region underperforms across multiple categories.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Correlation analysis and categorical impact scoring.</li>
+        <li>State and city-level profit and loss rate breakdowns.</li>
+        <li>Random Forest binary classification with confusion matrix.</li>
+        <li>Feature importance analysis for profitability drivers.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The analysis moves from broad EDA through geography-specific breakdowns to a classification stage. Shipping time was tested and found to have no meaningful effect on profit — discount depth and product category dominate the story.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>EDA stage</h3>
+          <ul>
+            <li>Correlation analysis across features</li>
+            <li>Categorical impact scoring</li>
+            <li>Time series exploration</li>
+            <li>Geography: state and city profit rates</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Classification</h3>
+          <ul>
+            <li>Random Forest binary classifier</li>
+            <li>Confusion matrix evaluation</li>
+            <li>Feature importance ranking</li>
+            <li>94% accuracy on order profitability</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repository and run the analysis notebook or scripts. The repo includes a summary visualization (<code>summary.png</code>) and uses pandas, scikit-learn, seaborn, and matplotlib.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Stack</strong>
+        <p>Python, pandas, scikit-learn, seaborn, matplotlib</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Learning EDA-to-classification workflows on a familiar retail dataset.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

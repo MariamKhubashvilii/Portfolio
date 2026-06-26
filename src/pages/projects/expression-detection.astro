@@ -1,0 +1,92 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/expression-detection-demo.mov';
+---
+
+<ProjectDetail
+  title="Expression Detection"
+  description="Real-time facial expression detection using dlib facial landmarks and geometric heuristics — no ML model required."
+  tags={['Computer Vision', 'dlib', 'OpenCV']}
+  github="https://github.com/MariamKhubashvilii/expression-detection"
+  accent="pink"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        A real-time facial expression detector built with OpenCV and dlib. It uses 68 facial landmarks and simple geometric heuristics — not machine learning — to classify expressions and react with spoken comments via macOS <code>say</code>.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Interpretable rules</strong>
+          <p>All classification is threshold-based on mouth, eye, and brow geometry — fully transparent and tunable.</p>
+        </div>
+        <div>
+          <strong>Temporal smoothing</strong>
+          <p>Majority vote across frames reduces flicker; audio feedback has a cooldown to prevent spam.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>dlib frontal face detection and 68-point landmarks.</li>
+        <li>Geometric feature extraction (mouth, EAR, brow gap).</li>
+        <li>Rule-based classification into five expressions.</li>
+        <li>Frame-level smoothing and audio reactions.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The webcam captures live video, dlib detects faces and extracts 68 landmarks per face. Features are normalized using outer eye-corner distance, then mouth curvature, eye aspect ratio, and brow gap feed into threshold rules that classify happy, sad, angry, surprised, or neutral.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Expressions</h3>
+          <ul>
+            <li>Happy</li>
+            <li>Sad</li>
+            <li>Angry</li>
+            <li>Surprised</li>
+            <li>Neutral</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Why heuristics?</h3>
+          <ul>
+            <li>Interpretable facial geometry</li>
+            <li>Ratios that scale across face sizes</li>
+            <li>Clear thresholds you can tune</li>
+            <li>Fast, lightweight, easy to debug</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Install dependencies (<code>dlib</code>, <code>opencv-python</code>), ensure you have a webcam, and run the main script. macOS is required for the built-in <code>say</code> audio feedback command.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Requirements</strong>
+        <p>Python 3.8+, macOS, webcam, dlib, OpenCV</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Exploring how far rule-based CV can go before reaching for a trained model.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

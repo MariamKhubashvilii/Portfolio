@@ -1,0 +1,611 @@
+---
+// ProjectCard.astro
+interface Props {
+  title:       string;
+  description: string;
+  tags:        string[];
+  github?:     string;
+  demo?:       string;
+  demoVideo?:  string;
+  demoImage?:  string;
+  comingSoon?: boolean;
+  page?:       string;
+  accent:      'purple' | 'mint' | 'pink' | 'blue' | 'amber' | 'emerald';
+  index:       number;
+}
+
+const { title, description, tags, github, demo, demoVideo, demoImage, comingSoon, page, accent, index } = Astro.props;
+
+const accentMap = {
+  purple: { dot: '#a78bfa', glow: 'rgba(167,139,250,0.18)', tag: 'rgba(167,139,250,0.08)', tagBorder: 'rgba(167,139,250,0.14)', tagText: '#a78bfa', line: 'rgba(167,139,250,0.5)' },
+  mint:   { dot: '#6ee7b7', glow: 'rgba(110,231,183,0.15)', tag: 'rgba(110,231,183,0.06)', tagBorder: 'rgba(110,231,183,0.12)', tagText: '#06b6a4', line: 'rgba(110,231,183,0.5)' },
+  pink:   { dot: '#f9a8d4', glow: 'rgba(249,168,212,0.14)', tag: 'rgba(249,168,212,0.06)', tagBorder: 'rgba(249,168,212,0.12)', tagText: '#f472b6', line: 'rgba(249,168,212,0.5)' },
+  blue:   { dot: '#60a5fa', glow: 'rgba(96,165,250,0.14)',  tag: 'rgba(96,165,250,0.06)',  tagBorder: 'rgba(96,165,250,0.12)',  tagText: '#60a5fa', line: 'rgba(96,165,250,0.5)' },
+  amber:  { dot: '#fbbf24', glow: 'rgba(251,191,36,0.12)',  tag: 'rgba(251,191,36,0.06)',  tagBorder: 'rgba(251,191,36,0.12)',  tagText: '#f59e0b', line: 'rgba(251,191,36,0.5)' },
+  emerald:{ dot: '#34d399', glow: 'rgba(52,211,153,0.14)', tag: 'rgba(52,211,153,0.06)', tagBorder: 'rgba(52,211,153,0.12)', tagText: '#10b981', line: 'rgba(52,211,153,0.5)' },
+};
+
+const c = accentMap[accent];
+---
+
+<div class="project-card-wrapper">
+  <article
+    class="project-card reveal"
+    data-index={index}
+    data-page={page}
+    role={page ? 'link' : undefined}
+    tabindex={page ? 0 : undefined}
+    style={`--dot: ${c.dot}; --glow: ${c.glow}; --tag-bg: ${c.tag}; --tag-border: ${c.tagBorder}; --tag-text: ${c.tagText}; --line: ${c.line};`}
+  >
+    <div class="dot-row">
+      <span class="dot"></span>
+    </div>
+
+    <div class="screenshot" aria-hidden="true">
+        {demoVideo ? (
+          <div class="thumb-wrap">
+            <video
+              class="screenshot-video"
+              src={demoVideo}
+              muted
+              loop
+              autoplay
+              playsinline
+              preload="metadata"
+            />
+            <button class="thumb-fs" aria-label="Enter full screen">Click here to see the video up close</button>
+          </div>
+        ) : demoImage ? (
+          <img
+            class="screenshot-image"
+            src={demoImage}
+            alt=""
+            loading="lazy"
+          />
+        ) : comingSoon ? (
+          <div class="comingsoon-thumb">No cool demos yet</div>
+        ) : (
+          <div class="placeholder">Screenshot</div>
+        )}
+      </div>
+
+    <div class="tags">
+      {tags.map(t => <span class="tag mono">{t}</span>)}
+    </div>
+
+    <h2>{title}</h2>
+    <p>{description}</p>
+
+    <div class="links">
+      {github && (
+        <a href={github} target="_blank" rel="noopener noreferrer" class="link mono">
+          github →
+        </a>
+      )}
+      {demo && (
+        <a href={demo} target="_blank" rel="noopener noreferrer" class="link mono">
+          live demo →
+        </a>
+      )}
+    </div>
+  </article>
+</div>
+
+<style>
+  .project-card-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .halo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: 10;
+  }
+
+  .project-card-wrapper:has(.project-card:hover) .halo {
+    opacity: 1;
+  }
+
+  .project-card {
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 28px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition:
+      border-color 0.3s ease,
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-card[data-page] {
+    cursor: pointer;
+  }
+
+  .project-card[data-page]:hover {
+    border-color: var(--dot);
+  }
+
+  .project-card {
+    min-height: 140px;
+  }
+
+  .saturn-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  /* Hover glow using a pseudo-element so it doesn't affect layout */
+  .project-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: radial-gradient(ellipse at 30% 20%, var(--glow), transparent 65%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .project-card:hover {
+    border-color: var(--dot);
+    transform: translateY(-5px);
+    /* show canvas only on hover for desktop via JS */
+  }
+
+  .project-card:hover {
+    padding-bottom: 44px;
+  }
+
+  .project-card:hover::after {
+    opacity: 1;
+  }
+
+  .dot-row {
+    margin-bottom: 18px;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot);
+    box-shadow: 0 0 10px var(--dot), 0 0 20px var(--dot);
+    transition: opacity 0.35s ease;
+  }
+
+  .project-card:hover .dot {
+    opacity: 0;
+  }
+
+  .tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .tag {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 10px;
+    background: var(--tag-bg);
+    border: 0.5px solid var(--tag-border);
+    color: var(--tag-text);
+  }
+
+  .screenshot {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.36s cubic-bezier(0.22,1,0.36,1), opacity 0.36s;
+    opacity: 0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+
+  .thumb-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .project-card:hover .screenshot {
+    height: 140px;
+    opacity: 1;
+  }
+
+  .screenshot .placeholder {
+    width: 88%;
+    height: 88%;
+    border-radius: 12px;
+    border: 0.5px dashed rgba(255,255,255,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(226,228,240,0.32);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .screenshot-video {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+  }
+
+  .screenshot-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: contain;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .comingsoon-thumb {
+    width: 88%;
+    height: 88%;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-align: center;
+    border: 0.5px solid rgba(255,255,255,0.06);
+    background:
+      radial-gradient(ellipse at 30% 25%, rgba(167,139,250,0.16), transparent 60%),
+      radial-gradient(ellipse at 75% 80%, rgba(249,168,212,0.14), transparent 60%),
+      rgba(255,255,255,0.01);
+    background-clip: padding-box;
+    color: transparent;
+    background-image:
+      radial-gradient(ellipse at 30% 25%, rgba(167,139,250,0.16), transparent 60%),
+      radial-gradient(ellipse at 75% 80%, rgba(249,168,212,0.14), transparent 60%),
+      linear-gradient(120deg, var(--purple) 0%, var(--mint) 55%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .thumb-fs {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background: rgba(0,0,0,0.22);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    color: transparent;
+    background-image: linear-gradient(120deg, var(--purple) 0%, var(--mint) 55%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.38);
+    opacity: 0;
+    transition: opacity 0.18s ease, transform 0.12s ease;
+  }
+
+  .thumb-wrap:hover .thumb-fs {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+
+  h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .links {
+    display: flex;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .link {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--dot);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .link:hover {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  (function () {
+    function goFullscreen(el) {
+      if (!el) return;
+      if (el.requestFullscreen) return el.requestFullscreen();
+      if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
+      if (el.msRequestFullscreen) return el.msRequestFullscreen();
+    }
+
+    document.addEventListener('click', (e) => {
+      const fsBtn = e.target.closest('.thumb-fs');
+      if (fsBtn) {
+        const wrap = fsBtn.closest('.thumb-wrap');
+        const vid = wrap && wrap.querySelector('video');
+        if (vid) goFullscreen(vid);
+      }
+    });
+  })();
+</script>
+
+<script>
+  // Floating halo canvas attached to document.body so it never clips
+  if (typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches) {
+    let globalCanvas = document.getElementById('project-halo-canvas') as HTMLCanvasElement | null;
+    if (!globalCanvas) {
+      globalCanvas = document.createElement('canvas');
+      globalCanvas.id = 'project-halo-canvas';
+      Object.assign(globalCanvas.style, {
+        position: 'fixed',
+        left: '0',
+        top: '0',
+        width: '100vw',
+        height: '100vh',
+        pointerEvents: 'none',
+        zIndex: '9999',
+        opacity: '0',
+        transition: 'opacity 0.24s linear',
+      });
+      document.body.appendChild(globalCanvas);
+    }
+
+    const ctx = (globalCanvas as HTMLCanvasElement).getContext('2d')!;
+
+    function resizeGlobal() {
+      (globalCanvas as HTMLCanvasElement).width  = window.innerWidth * devicePixelRatio;
+      (globalCanvas as HTMLCanvasElement).height = window.innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+    resizeGlobal();
+    window.addEventListener('resize', resizeGlobal);
+
+    const cards = document.querySelectorAll('.project-card');
+    let activeCard: HTMLElement | null = null;
+    let raf: number | null = null;
+    let angle = 0;
+    let lifting = false;
+    let liftStart = 0;
+    const liftDuration = 900;
+    let fading = false;
+    let fadeStart = 0;
+    const fadeDuration = 260;
+
+    function computeOrbitParamsForCard(cardRect: DOMRect) {
+      const w = cardRect.width;
+      const h = cardRect.height;
+      const cx = cardRect.right - w * 0.08;
+      const cy = cardRect.top + h * 0.04; // slightly lower, still cutting through the edge
+      const r = Math.min(w, h) * 0.22; // smaller so it sits outside the corner
+      return { cx, cy, rx: r, ry: r * 0.42, rot: 0.42 };
+    }
+
+    function orbitPosition(params: any, theta: number) {
+      const { cx, cy, rx, ry, rot } = params;
+      const cosT = Math.cos(theta);
+      const sinT = Math.sin(theta);
+      const x = cx + cosT * rx * Math.cos(rot) - sinT * ry * Math.sin(rot);
+      const y = cy + cosT * rx * Math.sin(rot) + sinT * ry * Math.cos(rot);
+      return { x, y };
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, (globalCanvas as HTMLCanvasElement).width, (globalCanvas as HTMLCanvasElement).height);
+
+      if (!activeCard) {
+        if (fading) {
+          const t = Math.min(1, (performance.now() - fadeStart) / fadeDuration);
+          (globalCanvas as HTMLCanvasElement).style.opacity = String(1 - t);
+          if (t >= 1) {
+            fading = false;
+            (globalCanvas as HTMLCanvasElement).style.opacity = '0';
+            if (raf) { cancelAnimationFrame(raf); raf = null; }
+            return;
+          }
+        } else {
+          if (raf) { cancelAnimationFrame(raf); raf = null; }
+          return;
+        }
+      } else {
+        (globalCanvas as HTMLCanvasElement).style.opacity = '1';
+      }
+
+      const cardRect = activeCard.getBoundingClientRect();
+      const params = computeOrbitParamsForCard(cardRect);
+
+      const glowColor = getComputedStyle(activeCard).getPropertyValue('--dot') || '#fff';
+      const lineColor = getComputedStyle(activeCard).getPropertyValue('--line') || glowColor;
+
+      // draw noisy brush halo
+      ctx.save();
+      ctx.translate(params.cx, params.cy);
+      ctx.rotate(params.rot);
+      ctx.globalAlpha = 0.18;
+      for (let i = 0; i < 4; i++) {
+        const offset = (i - 1.5) * 4;
+        ctx.beginPath();
+        ctx.ellipse(
+          0,
+          0,
+          params.rx + offset + (Math.random() - 0.5) * 8,
+          params.ry + offset * 0.28 + (Math.random() - 0.5) * 6,
+          0,
+          0,
+          Math.PI * 2
+        );
+        ctx.strokeStyle = glowColor;
+        ctx.lineWidth = 2 + Math.random() * 2;
+        ctx.stroke();
+      }
+      ctx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < 28; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const radius = params.rx + 8 + Math.random() * 18;
+        const x = Math.cos(theta) * radius;
+        const y = Math.sin(theta) * (params.ry + 4) + (Math.random() - 0.5) * 10;
+        ctx.beginPath();
+        ctx.arc(x, y, Math.random() * 1.6 + 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = glowColor;
+        ctx.fill();
+      }
+      ctx.restore();
+      ctx.globalCompositeOperation = 'source-over';
+
+      // planet position on orbit
+      const orbitPos = orbitPosition(params, angle);
+
+      // dot starting point
+      const dotEl = activeCard.querySelector('.dot') as HTMLElement;
+      const dotRect = dotEl.getBoundingClientRect();
+      const startX = dotRect.left + dotRect.width / 2;
+      const startY = dotRect.top + dotRect.height / 2;
+
+      let px = orbitPos.x;
+      let py = orbitPos.y;
+      if (lifting) {
+        const now = performance.now();
+        const t = Math.min(1, (now - liftStart) / liftDuration);
+        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        px = startX + (orbitPos.x - startX) * ease;
+        py = startY + (orbitPos.y - startY) * ease;
+      }
+
+      // draw textured planet
+      const pr = Math.max(6, Math.min(14, Math.min(cardRect.width, cardRect.height) * 0.04));
+      const planetGrad = ctx.createRadialGradient(px - pr * 0.2, py - pr * 0.2, pr * 0.1, px, py, pr);
+      planetGrad.addColorStop(0, 'rgba(255,255,255,0.9)');
+      planetGrad.addColorStop(0.25, glowColor);
+      planetGrad.addColorStop(0.75, lineColor);
+      planetGrad.addColorStop(1, 'rgba(0,0,0,0.18)');
+      ctx.beginPath();
+      ctx.fillStyle = planetGrad;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = glowColor;
+      ctx.arc(px, py, pr, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // spinning surface band
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.rotate(angle * 3.2);
+      ctx.strokeStyle = 'rgba(255,255,255,0.24)';
+      ctx.lineWidth = Math.max(1, pr * 0.14);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, pr * 0.78, pr * 0.3, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // planet texture speckles
+      for (let i = 0; i < 5; i++) {
+        const loc = Math.random() * Math.PI * 2;
+        const offsetRadius = pr * 0.55 * Math.random();
+        ctx.beginPath();
+        ctx.arc(
+          px + Math.cos(loc) * offsetRadius * 0.7,
+          py + Math.sin(loc) * offsetRadius * 0.4,
+          Math.random() * (pr * 0.12) + 0.8,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = 'rgba(255,255,255,0.18)';
+        ctx.fill();
+      }
+
+      // highlight glow
+      const highlight = ctx.createRadialGradient(px - pr * 0.25, py - pr * 0.25, pr * 0.08, px - pr * 0.25, py - pr * 0.25, pr * 0.55);
+      highlight.addColorStop(0, 'rgba(255,255,255,0.7)');
+      highlight.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.beginPath();
+      ctx.fillStyle = highlight;
+      ctx.arc(px - pr * 0.22, py - pr * 0.22, pr * 0.65, 0, Math.PI * 2);
+      ctx.fill();
+
+      // advance angle
+      if (!lifting) angle += 0.016; // slower orbit
+      else if (performance.now() - liftStart >= liftDuration) lifting = false;
+
+      raf = requestAnimationFrame(draw);
+    }
+
+    function onEnter(e: Event) {
+      const card = (e.currentTarget as HTMLElement);
+      activeCard = card;
+      lifting = true;
+      liftStart = performance.now();
+      fading = false;
+      if (!raf) draw();
+    }
+
+    function onLeave() {
+      fading = true;
+      fadeStart = performance.now();
+      activeCard = null;
+      lifting = false;
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', onEnter);
+      card.addEventListener('mouseleave', onLeave);
+
+      const pageUrl = card.dataset.page;
+      if (pageUrl) {
+        card.addEventListener('click', (event) => {
+          if ((event.target as HTMLElement).closest('a')) return;
+          window.location.href = pageUrl;
+        });
+
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            window.location.href = pageUrl;
+          }
+        });
+
+        card.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', (event) => event.stopPropagation());
+        });
+      }
+    });
+  }
+</script>

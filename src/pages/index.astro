@@ -1,0 +1,468 @@
+---
+import StarField          from '../components/StarField.astro';
+import ConstellationCanvas from '../components/ConstellationCanvas.astro';
+import Nav                from '../components/Nav.astro';
+import ProjectCard        from '../components/ProjectCard.astro';
+import SolarSystem        from '../components/SolarSystem.astro';
+import '../styles/global.css';
+
+const springDemoVideo = '/videos/physics-spring-demo.mp4';
+const copylensDemoVideo = '/videos/copylens-demo.mov';
+const wemoCheckDemoVideo = '/videos/wemo-check-demo.mov';
+const aptrankNycDemoVideo = '/videos/aptrank-nyc-demo.mov';
+const physicsMotionDemoVideo = '/videos/physics-motion-demo.mp4';
+const openaiRagDemoVideo = '/videos/openai-rag-demo.mov';
+const expressionDetectionDemoVideo = '/videos/expression-detection-demo.mov';
+const linearRegressionDemoImage = '/screenshots/linear-regression-stars.png';
+const automatedGscDemoImage = '/screenshots/automated-gsc.png';
+const superstoreDemoImage = '/screenshots/superstore-profitability.png';
+const physicsRagDemoImage = '/screenshots/physics-rag.png';
+
+const activeDevelopment = [
+  {
+    title:       'SEO Writer',
+    description: 'Multi-mode article and landing page optimiser with structured templates for SEO-first writing.',
+    tags:        ['NLP', 'SEO', 'Tools'],
+    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
+    demoVideo:   '/videos/seo-writer-demo.mp4',
+    page:        '/projects/seo-writer',
+    accent:      'emerald',
+  },
+  {
+    title:       'Physics Tutor',
+    description: 'Research assistant over physics papers and textbooks. Upload PDFs or link arXiv articles and get citation-aware answers.',
+    tags:        ['RAG', 'ChromaDB', 'ML'],
+    github:      'https://github.com/MariamKhubashvilii/Physics-Chatbot',
+    demoImage:   physicsRagDemoImage,
+    page:        '/projects/physics-rag',
+    accent:      'blue',
+  },
+  {
+    title:       'Recession Playlist',
+    description: 'Correlating Spotify audio features with macroeconomic indicators to study music and economic trends.',
+    tags:        ['Data Science', 'Spotify', 'FRED'],
+    github:      'https://github.com/MariamKhubashvilii/music-economy',
+    comingSoon:  true,
+    page:        '/projects/recession-playlist',
+    accent:      'pink',
+  },
+  {
+    title:       'Friend Finder',
+    description: 'A chat widget that answers questions about finding old friends online. Built for Friendsreconnected.co.uk ',
+    tags:        ['AI', 'Chatbot', 'WordPress'],
+    github:      'https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot',
+    comingSoon:  true,
+    page:        '/projects/friend-finder',
+    accent:      'pink',
+  },
+] as const;
+
+const finished = [
+  {
+    title:       'CopyLens',
+    description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
+    tags:        ['NLP', 'SEO', 'GPT'],
+    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror',
+    demoVideo:   copylensDemoVideo,
+    page:        '/projects/copylens',
+    accent:      'purple',
+  },
+  {
+    title:       'Wemo Check',
+    description: 'A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather.',
+    tags:        ['ML', 'Streamlit', 'Anthropic'],
+    github:      'https://github.com/MariamKhubashvilii/Wemo-Check',
+    demoVideo:   wemoCheckDemoVideo,
+    page:        '/projects/wemo-check',
+    accent:      'mint',
+  },
+  {
+    title:       'AptRank NYC',
+    description: 'Apartment ranking tool for NYC that scores units across transit, price, and neighbourhood factors.',
+    tags:        ['Data', 'Python', 'Tools'],
+    github:      'https://github.com/MariamKhubashvilii/Apartment-Search',
+    demoVideo:   aptrankNycDemoVideo,
+    page:        '/projects/aptrank-nyc',
+    accent:      'amber',
+  },
+  {
+    title:       'Physics Spring',
+    description: 'Interactive spring simulator with webcam hand tracking, live physics values, and damping visualization.',
+    tags:        ['Python', 'OpenCV', 'MediaPipe'],
+    github:      'https://github.com/MariamKhubashvilii/Physics-Spring',
+    demoVideo:   springDemoVideo,
+    page:        '/projects/physics-spring',
+    accent:      'purple',
+  },
+  {
+    title:       'Automated GSC Data Overview',
+    description: 'A small Python tool that pulls week-over-week Google Search Console data and delivers a readable summary via email or WhatsApp.',
+    tags:        ['Python', 'GSC', 'Data'],
+    github:      'https://github.com/MariamKhubashvilii/Automated-GSC-Data-Overview-Message',
+    demoImage:   automatedGscDemoImage,
+    page:        '/projects/automated-gsc',
+    accent:      'blue',
+  },
+  {
+    title:       'Superstore Profitability Analysis',
+    description: 'Exploratory data analysis and binary classification on the Sample Superstore dataset. Which products or states drive the most profit?',
+    tags:        ['Data Science', 'Classification', 'EDA'],
+    github:      'https://github.com/MariamKhubashvilii/Superstore-Profitability-Analysis',
+    demoImage:   superstoreDemoImage,
+    page:        '/projects/superstore-profitability',
+    accent:      'pink',
+  },
+  {
+    title:       'Linear Regression Star Types',
+    description: 'Beginner-friendly linear regression project using star data, covering OLS, gradient descent, SGD, Ridge, Lasso, and Elastic Net.',
+    tags:        ['ML', 'Linear Regression', 'Data Science'],
+    github:      'https://github.com/MariamKhubashvilii/Linear-Regression-Star-Types',
+    demoImage:   linearRegressionDemoImage,
+    page:        '/projects/linear-regression-stars',
+    accent:      'emerald',
+  },
+  {
+    title:       'Physics Motion',
+    description: 'A fun hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall.',
+    tags:        ['Python', 'Physics', 'Simulation'],
+    github:      'https://github.com/MariamKhubashvilii/Physics-Motion',
+    demoVideo:   physicsMotionDemoVideo,
+    page:        '/projects/physics-motion',
+    accent:      'mint',
+  },
+  {
+    title:       'OpenAI RAG',
+    description: 'Retrieval-Augmented Generation chatbot using OpenAI embeddings and semantic search for intelligent document retrieval.',
+    tags:        ['RAG', 'OpenAI', 'AI'],
+    github:      'https://github.com/MariamKhubashvilii/openai-rag',
+    demoVideo:   openaiRagDemoVideo,
+    page:        '/projects/openai-rag',
+    accent:      'purple',
+  },
+  {
+    title:       'Expression Detection',
+    description: 'Real-time facial expression detection using dlib facial landmarks for emotion recognition.',
+    tags:        ['Computer Vision', 'ML', 'dlib'],
+    github:      'https://github.com/MariamKhubashvilii/expression-detection',
+    demoVideo:   expressionDetectionDemoVideo,
+    page:        '/projects/expression-detection',
+    accent:      'pink',
+  },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Marie Khubashvili — ML engineering projects, data science tools, and AI experiments." />
+  <title>Projects — Marie Khubashvili</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <div id="aurora" aria-hidden="true"></div>
+  <StarField />
+  <ConstellationCanvas />
+  <Nav />
+
+  <main>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow mono">// projects</span>
+          <h1>
+            What I've built<br>
+            <span class="gradient">and found interesting</span>
+          </h1>
+          <p class="hero-sub">
+            ML tools, data experiments, and web apps.<br>
+            Some deployed. Some living in notebooks. <br>
+            I designed and built this site from scratch. <br>
+            Hope the visuals make you stay a little longer. <br>
+          </p>
+          <a
+            href="https://github.com/MariamKhubashvilii"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-link mono"
+          >
+            github.com/MariamKhubashvilii ↗
+          </a>
+        </div>
+        <SolarSystem />
+      </div>
+    </section>
+
+    <section class="projects">
+      <div class="projects-container">
+        <div class="projects-group">
+          <h2 class="section-heading">Cool projects in active development</h2>
+          <p class="section-intro">
+            Some projects I'm genuinely excited about, even if they're not finished yet. Ideas too good to sit on. <br>
+            If you want to see finished ones, go ahead to the next section.
+          </p>
+          <div class="grid">
+            {activeDevelopment.map((p, i) => (
+              <ProjectCard
+                title={p.title}
+                description={p.description}
+                tags={[...p.tags]}
+                github={p.github}
+                demo={p.demo}
+                demoVideo={p.demoVideo}
+                demoImage={p.demoImage}
+                comingSoon={p.comingSoon}
+                page={p.page}
+                accent={p.accent}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div class="projects-group">
+          <h2 class="section-heading">Projects that are finished</h2>
+          <div class="grid">
+            {finished.map((p, i) => (
+              <ProjectCard
+                title={p.title}
+                description={p.description}
+                tags={[...p.tags]}
+                github={p.github}
+                demo={p.demo}
+                demoVideo={p.demoVideo}
+                demoImage={p.demoImage}
+                comingSoon={p.comingSoon}
+                page={p.page}
+                accent={p.accent}
+                index={i + activeDevelopment.length}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span class="mono">marie.dev</span>
+      <span class="foot-links">
+        <a href="https://github.com/MariamKhubashvilii" target="_blank" rel="noopener noreferrer">github</a>
+        <a href="mailto:hello@marie.dev">email</a>
+      </span>
+    </footer>
+  </main>
+
+</body>
+</html>
+
+<style>
+  main {
+    position: relative;
+    z-index: 2;
+    padding-top: 88px;
+  }
+
+  .hero {
+    padding: 80px 48px 64px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: 44px;
+  }
+
+  @media (min-width: 960px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 80px;
+      align-items: center;
+    }
+  }
+
+  .hero-copy {
+    max-width: 680px;
+  }
+
+  .eyebrow {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--mint);
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  h1 {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+
+  .gradient {
+    background: linear-gradient(120deg, var(--purple) 0%, var(--mint) 55%, var(--pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    margin-bottom: 28px;
+  }
+
+  .github-link {
+    font-size: 12px;
+    color: var(--purple);
+    letter-spacing: 0.04em;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+  .github-link:hover { opacity: 1; }
+
+  /* Cursor aurora */
+  #aurora {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 364px;
+    height: 364px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(115, 220, 170, 0.92), rgba(42, 82, 62, 0.68) 15%, transparent 38%),
+      radial-gradient(ellipse 180px 120px at 70% 40%, rgba(44, 138, 104, 0.74), rgba(18, 38, 30, 0.38) 28%, transparent 56%),
+      radial-gradient(ellipse 160px 100px at 40% 70%, rgba(76, 190, 150, 0.72), rgba(16, 32, 26, 0.24) 32%, transparent 58%);
+    filter: blur(90px);
+    opacity: 0.855;
+    box-shadow:
+      inset 0 0 40px rgba(8, 18, 14, 0.35),
+      0 0 30px rgba(30, 90, 66, 0.14);
+    transition: left 0.12s linear, top 0.12s linear;
+  }
+
+  .projects {
+    padding: 0 48px 80px;
+  }
+
+  .projects-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .projects-group {
+    margin-bottom: 60px;
+  }
+
+  .projects-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-heading {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  .section-heading:has(+ .section-intro) {
+    margin-bottom: 16px;
+  }
+
+  .section-intro {
+    max-width: 680px;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  footer {
+    border-top: 0.5px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  .foot-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  footer a {
+    color: var(--text-faint);
+    transition: color 0.2s;
+  }
+  footer a:hover { color: var(--purple); }
+
+  @media (max-width: 700px) {
+    .hero     { padding: 48px 24px 40px; }
+    .projects { padding: 0 24px 60px; }
+    footer    { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    .grid     { grid-template-columns: 1fr; }
+    #aurora { display: none; }
+  }
+</style>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('.project-card');
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const card  = entry.target as HTMLElement;
+        const index = Number(card.dataset.index ?? 0);
+
+        setTimeout(() => {
+          card.classList.add('visible');
+          const rect = card.getBoundingClientRect();
+          const x    = rect.left + rect.width  / 2;
+          const y    = rect.top  + rect.height / 2;
+          (window as any).registerConstellationNode?.(x, y);
+        }, index * 110);
+
+        observer.unobserve(card);
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  cards.forEach(card => observer.observe(card));
+</script>
+
+<script>
+  // Cursor aurora: desktop only
+  if (typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches) {
+    const aurora = document.getElementById('aurora');
+    if (aurora) {
+      window.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        aurora.style.left = x + 'px';
+        aurora.style.top  = y + 'px';
+      });
+    }
+  }
+</script>

@@ -1,0 +1,89 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Recession Playlist"
+  description="A work-in-progress study of whether aggregate music preferences correlate with economic conditions — do people reach for sadder, slower music when the economy turns dark?"
+  tags={['Data Science', 'Spotify', 'FRED']}
+  github="https://github.com/MariamKhubashvilii/music-economy"
+  accent="pink"
+  comingSoon={true}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        This research project investigates whether aggregate music preferences correlate with economic conditions. The core question: do people reach for sadder, slower, more introspective music when the economy turns dark? It merges Billboard chart history, Spotify audio features, and FRED economic indicators to find out.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Competing hypotheses</strong>
+          <p>Tests mood reflection vs. mood regulation, and whether musical mood leads or lags the economy.</p>
+        </div>
+        <div>
+          <strong>Status</strong>
+          <p>Active work in progress — data integration and index construction are underway.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Merging Billboard, Spotify, and FRED data into one timeline.</li>
+        <li>Monthly "mood indices" from chart and audio-feature data.</li>
+        <li>Cross-correlation analysis at multiple lag periods.</li>
+        <li>Regression and recession-vs-non-recession comparisons.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The project tests four competing hypotheses about music and the economy, then works through four phases — from data integration to interpretation against existing academic literature.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Hypotheses</h3>
+          <ul>
+            <li>H1 — Mood reflection: valence declines in downturns</li>
+            <li>H2 — Mood regulation: valence rises in downturns</li>
+            <li>H3 — Leading indicator: mood shifts precede downturns</li>
+            <li>H4 — Lagging indicator: mood shifts only after the data moves</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Method</h3>
+          <ul>
+            <li>Integrate Billboard, Spotify, and FRED data</li>
+            <li>Build monthly mood indices (optionally VADER lyrics)</li>
+            <li>Cross-correlation and regression at multiple lags</li>
+            <li>Interpret against the music-economy literature</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Data &amp; caveats</h2>
+    <p>
+      Data comes from Billboard historical charts, Spotify audio-feature datasets, and the FRED API for economic indicators. The analysis is upfront about its limits — US-mainstream chart bias, audio features as imperfect proxies for emotion, correlation-vs-causation challenges, and blind spots for niche musical communities.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Data sources</strong>
+        <p>Billboard charts, Spotify audio features, FRED economic indicators.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Anyone curious how cultural mood and macroeconomics might move together.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

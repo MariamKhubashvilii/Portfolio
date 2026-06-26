@@ -1,0 +1,89 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Friend Finder"
+  description="A fully local, self-hosted RAG chat widget that answers questions about a website's content — no external APIs, embedded on a WordPress site to help reconnect old friends."
+  tags={['RAG', 'Ollama', 'ChromaDB', 'FastAPI']}
+  github="https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot"
+  accent="pink"
+  comingSoon={true}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Friend Finder is a fully local, self-hosted chatbot that answers questions about website content without relying on external APIs. It combines web scraping, vector embeddings, and a local language model into a privacy-first, cost-effective solution — deployed as a widget on the Friends Reconnected WordPress site.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Fully local</strong>
+          <p>No cloud dependencies or API fees — scraping, embeddings, and the LLM all run on your own machine.</p>
+        </div>
+        <div>
+          <strong>Smart updates</strong>
+          <p>MD5 fingerprints detect what changed, so new pages can be added without re-embedding the whole database.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>JavaScript-aware scraping with Playwright and BeautifulSoup.</li>
+        <li>Incremental indexing with content-change detection.</li>
+        <li>Streaming token responses over Server-Sent Events.</li>
+        <li>WordPress integration as an embeddable iframe widget.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The system runs in three stages: Playwright scrapes JavaScript-rendered pages and BeautifulSoup extracts clean text; sentence-transformers convert text chunks into embeddings stored in ChromaDB; and incoming questions are embedded, matched against stored vectors, and answered by a local Ollama model with streaming responses.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Scrape via explicit URLs, sitemaps, or recursive crawl</li>
+            <li>Chunk and embed with all-MiniLM-L6-v2</li>
+            <li>Store vectors in persistent local ChromaDB</li>
+            <li>Answer with Ollama (Llama 3.2 / Mistral), streamed</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Tech stack</h3>
+          <ul>
+            <li>Scraping: Playwright + BeautifulSoup</li>
+            <li>Embeddings: sentence-transformers</li>
+            <li>Backend: FastAPI with Server-Sent Events</li>
+            <li>Frontend: vanilla HTML/JavaScript widget</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Install Ollama and pull a model (<code>ollama pull llama3.2</code>), then set up the Python environment. Scrape content with <code>python scrape.py --urls &lt;URLs&gt;</code> (or <code>--sitemap</code> / <code>--crawl</code>), build embeddings with <code>python ingest.py</code>, and launch with <code>uvicorn app:app --reload --port 8000</code>. Add new pages later with <code>--update</code> and the system skips unchanged content.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Live</strong>
+        <p><a href="https://friendsreconnected.co.uk" target="_blank" rel="noopener noreferrer">friendsreconnected.co.uk</a></p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Site owners who want a private, no-API chatbot over their own content.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

@@ -1,0 +1,90 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/copylens-demo.mov';
+---
+
+<ProjectDetail
+  title="CopyLens"
+  description="Competitor copy analysis tool. Paste your copy alongside competitors and get a strategic breakdown of tone, power words, and positioning gaps."
+  tags={['NLP', 'SEO', 'GPT']}
+  github="https://github.com/MariamKhubashvilii/Brand-Mirror"
+  accent="purple"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        CopyLens (Brand Mirror) compares your copy against competitors and surfaces tone differences, overlapping keywords, and positioning gaps. It turns a keyword and a handful of URLs into a readable strategic breakdown in seconds.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Competitive lens</strong>
+          <p>Paste your copy and competitor pages to see how tone, power words, and structure differ across the SERP.</p>
+        </div>
+        <div>
+          <strong>SEO-aware insights</strong>
+          <p>Highlights overlapping and missing language to show where a page might be under-signalling intent.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Competitor copy analysis from live URLs.</li>
+        <li>Tone and power-word breakdown across brands.</li>
+        <li>Positioning gap detection for SEO copy.</li>
+        <li>Streamlit UI for quick, interactive exploration.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        Pick a target keyword, select top-ranking competitors, and add your own page. The app extracts copy from each URL, compares language patterns, and returns a structured report on tone, overlapping terms, and gaps that might explain ranking differences.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Inputs</h3>
+          <ul>
+            <li>Target keyword or search intent</li>
+            <li>Competitor URLs from the SERP</li>
+            <li>Your own page for side-by-side comparison</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Outputs</h3>
+          <ul>
+            <li>Tone and voice comparison</li>
+            <li>Power-word and keyword overlap</li>
+            <li>Positioning gaps and missing signals</li>
+            <li>Quick strategic summary</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repository, install dependencies, and run the Streamlit app locally — or use the hosted demo at <a href="https://brand-mirror.streamlit.app/" target="_blank" rel="noopener noreferrer">brand-mirror.streamlit.app</a>.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Focus</strong>
+        <p>Competitive copy analysis, tone detection, and SEO positioning.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Writers, SEO teams, and founders benchmarking landing page copy.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

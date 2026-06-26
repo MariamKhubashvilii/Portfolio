@@ -1,0 +1,70 @@
+---
+// Nav.astro
+const links = [
+  { label: 'projects', href: '/' },
+  { label: 'github',   href: 'https://github.com/MariamKhubashvilii', external: true },
+];
+---
+
+<nav>
+  <a href="/" class="logo mono">marie.dev</a>
+  <ul>
+    {links.map(l => (
+      <li>
+        <a
+          href={l.href}
+          target={l.external ? '_blank' : undefined}
+          rel={l.external ? 'noopener noreferrer' : undefined}
+        >
+          {l.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 48px;
+    border-bottom: 0.5px solid var(--border);
+    background: rgba(7, 8, 15, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .logo {
+    font-size: 14px;
+    color: var(--purple);
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s;
+  }
+  .logo:hover { opacity: 0.7; }
+
+  ul {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  ul a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  ul a:hover { color: var(--mint); }
+
+  @media (max-width: 600px) {
+    nav { padding: 18px 24px; }
+    ul { gap: 20px; }
+  }
+</style>

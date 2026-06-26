@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/wemo-check-demo.mov';
+---
+
+<ProjectDetail
+  title="Wemo Check"
+  description="A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather."
+  tags={['ML', 'Streamlit', 'Anthropic']}
+  github="https://github.com/MariamKhubashvilii/Wemo-Check"
+  accent="mint"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Wemo Check is a personal wardrobe stylist that runs entirely on your machine. Upload clothing photos, auto-label items with AI, then ask for outfit suggestions based on a vibe, occasion, or weather — like "dinner in rain" or "beach day."
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Local-first wardrobe</strong>
+          <p>Photos and metadata stay on your machine in SQLite — nothing goes to the cloud except Anthropic API calls.</p>
+        </div>
+        <div>
+          <strong>Vibe-based dressing</strong>
+          <p>Type a mood or occasion and get three outfit suggestions drawn from your actual wardrobe.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>AI-powered clothing photo labeling with Anthropic.</li>
+        <li>Local SQLite storage for wardrobe items and saved outfits.</li>
+        <li>Streamlit UI for adding items, getting dressed, and rating looks.</li>
+        <li>Outfit suggestion prompts grounded in your wardrobe metadata.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        Add items through the Wardrobe tab — upload a photo, auto-label with AI, edit labels, and save. In Get Dressed, describe the vibe and the app suggests three outfits from your collection. Rate and save favorites to folders in Saved Outfits.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Workflow</h3>
+          <ul>
+            <li>Add clothing photos with AI auto-labeling</li>
+            <li>Describe a vibe or occasion for suggestions</li>
+            <li>Rate and save outfits to folders</li>
+            <li>Everything stored in <code>data/wardrobe.db</code></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Data storage</h3>
+          <ul>
+            <li><code>data/wardrobe.db</code> — items and outfits</li>
+            <li><code>uploads/</code> — clothing photos</li>
+            <li>API key entered in sidebar, never saved to disk</li>
+            <li>No cloud sync beyond Anthropic calls</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Install dependencies with <code>pip install -r requirements.txt</code>, then run <code>streamlit run app.py</code> and open <code>http://localhost:8501</code>. Paste your Anthropic API key in the sidebar on first use.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Dependencies</strong>
+        <p>Streamlit, Anthropic SDK, SQLite, Python 3.10+</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Anyone who wants a private, local wardrobe assistant without a subscription app.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

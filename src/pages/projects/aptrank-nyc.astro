@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/aptrank-nyc-demo.mov';
+---
+
+<ProjectDetail
+  title="AptRank NYC"
+  description="Apartment ranking tool for NYC that scores units across your personal places, neighborhood safety, and proximity tradeoffs."
+  tags={['Data', 'Python', 'Streamlit']}
+  github="https://github.com/MariamKhubashvilii/Apartment-Search"
+  accent="amber"
+  demoVideo={demoVideo}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        AptRank helps you see apartments against your actual life — your office, your mum's place, your favourite café. Define the places that matter, weight each category, and get a ranked list with a clear explanation of every tradeoff.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Personal scoring</strong>
+          <p>Weighted proximity to your frequent places using exponential decay — 1 km scores nearly full marks, 8 km scores much lower.</p>
+        </div>
+        <div>
+          <strong>Safety layer</strong>
+          <p>40+ NYC neighborhoods have baked-in safety scores that apply a multiplier to the final ranking.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Weighted scoring across work, family, friends, and leisure.</li>
+        <li>Exponential proximity decay instead of hard distance cutoffs.</li>
+        <li>Diversity penalty for apartments far from high-priority places.</li>
+        <li>Interactive map, stacked bar charts, and distance matrix.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The final score combines personal rating (35%), weighted proximity (40%), neighborhood safety (15%), and a balance bonus (10%), then applies a safety multiplier. Bulk-add addresses, paste coordinates from Google Maps, or use autocomplete to build your candidate list.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Scoring factors</h3>
+          <ul>
+            <li>Personal rating you assign per apartment</li>
+            <li>Weighted proximity to frequent places</li>
+            <li>Neighborhood safety multiplier</li>
+            <li>Balance bonus for all-round performers</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Features</h3>
+          <ul>
+            <li>Address autocomplete and bulk geocoding</li>
+            <li>Color-coded interactive map</li>
+            <li>Radar chart comparing top 3 picks</li>
+            <li>Full distance matrix in Analysis tab</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repo, install dependencies, and run the Streamlit app. Add your frequent places with category weights, then drop in apartment candidates to see ranked scores with explanations.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Stack</strong>
+        <p>Python 3.10+, Streamlit, Plotly, geocoding APIs</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>NYC apartment hunters who care about proximity to real life, not just listing specs.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

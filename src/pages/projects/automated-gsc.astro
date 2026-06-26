@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoImage = '/screenshots/automated-gsc.png';
+---
+
+<ProjectDetail
+  title="Automated GSC Data Overview"
+  description="A small Python tool that pulls week-over-week Google Search Console data and delivers a readable summary via email or WhatsApp."
+  tags={['Python', 'GSC', 'Data']}
+  github="https://github.com/MariamKhubashvilii/Automated-GSC-Data-Overview-Message"
+  accent="blue"
+  demoImage={demoImage}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        This tool watches a Google Search Console property, compares two adjacent 7-day windows, and sends a plain-language summary of which pages gained or lost impressions and clicks — and which queries drove the change.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Unattended reporting</strong>
+          <p>Designed for cron, launchd, or Task Scheduler — self-throttles so it won't re-run within a configurable minimum interval.</p>
+        </div>
+        <div>
+          <strong>Multi-channel delivery</strong>
+          <p>Saves a <code>.txt</code> report locally and optionally emails the full report or sends a short WhatsApp summary via Twilio.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Search Console API integration with service account auth.</li>
+        <li>Week-over-week page and query delta analysis.</li>
+        <li>Readable report generation from raw GSC data.</li>
+        <li>Email and WhatsApp delivery pipelines.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        A Google Cloud service account authenticates to the Search Console API without browser OAuth. The tool pulls page-level impressions and clicks for two adjacent 7-day periods, identifies top improving and declining pages, then fetches the queries behind each shift.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Authenticate via service account JSON key</li>
+            <li>Pull two adjacent 7-day GSC windows</li>
+            <li>Rank pages by impression delta</li>
+            <li>Pull top queries for each shifted page</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Delivery</h3>
+          <ul>
+            <li>Save report to <code>report_YYYY-MM-DD.txt</code></li>
+            <li>Email full report via SMTP</li>
+            <li>WhatsApp summary via Twilio</li>
+            <li>Self-throttle with <code>MIN_DAYS_BETWEEN_RUNS</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Create a Google Cloud service account with Search Console API access, copy <code>config.example.json</code> to <code>config.json</code>, add your property URL and delivery settings, then install dependencies and schedule the script.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Setup</strong>
+        <p>Service account key, GSC property access, optional SMTP or Twilio credentials.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>SEO practitioners who want weekly GSC deltas without opening the dashboard.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>
