@@ -6,7 +6,7 @@ interface Props {
   tags:        string[];
   github?:     string;
   demo?:       string;
-  demoVideo?:  string;
+  hasVideo?:   boolean;
   demoImage?:  string;
   comingSoon?: boolean;
   page?:       string;
@@ -14,7 +14,7 @@ interface Props {
   index:       number;
 }
 
-const { title, description, tags, github, demo, demoVideo, demoImage, comingSoon, page, accent, index } = Astro.props;
+const { title, description, tags, github, demo, hasVideo, demoImage, comingSoon, page, accent, index } = Astro.props;
 
 const accentMap = {
   purple: { dot: '#a78bfa', glow: 'rgba(167,139,250,0.18)', tag: 'rgba(167,139,250,0.08)', tagBorder: 'rgba(167,139,250,0.14)', tagText: '#a78bfa', line: 'rgba(167,139,250,0.5)' },
@@ -42,26 +42,19 @@ const c = accentMap[accent];
     </div>
 
     <div class="screenshot" aria-hidden="true">
-        {demoVideo ? (
+        {demoImage ? (
           <div class="thumb-wrap">
-            <video
-              class="screenshot-video"
-              src={demoVideo}
-              muted
-              loop
-              autoplay
-              playsinline
-              preload="metadata"
+            <img
+              class="screenshot-image"
+              src={demoImage}
+              alt=""
+              loading="lazy"
+              decoding="async"
             />
-            <button class="thumb-fs" aria-label="Enter full screen">Click here to see the video up close</button>
+            {hasVideo && page && (
+              <a class="thumb-fs" href={page}>Go to the page to see the full video →</a>
+            )}
           </div>
-        ) : demoImage ? (
-          <img
-            class="screenshot-image"
-            src={demoImage}
-            alt=""
-            loading="lazy"
-          />
         ) : comingSoon ? (
           <div class="comingsoon-thumb">No cool demos yet</div>
         ) : (
@@ -248,13 +241,6 @@ const c = accentMap[accent];
     background: rgba(255,255,255,0.01);
   }
 
-  .screenshot-video {
-    width: 100%;
-    height: 100%;
-    border-radius: 12px;
-    object-fit: contain;
-  }
-
   .screenshot-image {
     width: 100%;
     height: 100%;
@@ -301,6 +287,8 @@ const c = accentMap[accent];
     font-size: 12px;
     letter-spacing: 0.02em;
     cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
     color: transparent;
     background-image: linear-gradient(120deg, var(--purple) 0%, var(--mint) 55%, var(--pink) 100%);
     -webkit-background-clip: text;
@@ -311,6 +299,7 @@ const c = accentMap[accent];
     transition: opacity 0.18s ease, transform 0.12s ease;
   }
 
+  .project-card:hover .thumb-fs,
   .thumb-wrap:hover .thumb-fs {
     opacity: 1;
     transform: translateY(-2px);
@@ -348,26 +337,6 @@ const c = accentMap[accent];
     opacity: 1;
   }
 </style>
-
-<script>
-  (function () {
-    function goFullscreen(el) {
-      if (!el) return;
-      if (el.requestFullscreen) return el.requestFullscreen();
-      if (el.webkitRequestFullscreen) return el.webkitRequestFullscreen();
-      if (el.msRequestFullscreen) return el.msRequestFullscreen();
-    }
-
-    document.addEventListener('click', (e) => {
-      const fsBtn = e.target.closest('.thumb-fs');
-      if (fsBtn) {
-        const wrap = fsBtn.closest('.thumb-wrap');
-        const vid = wrap && wrap.querySelector('video');
-        if (vid) goFullscreen(vid);
-      }
-    });
-  })();
-</script>
 
 <script>
   // Floating halo canvas attached to document.body so it never clips

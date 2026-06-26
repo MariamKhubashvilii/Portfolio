@@ -11,6 +11,7 @@ interface Props {
   github: string;
   accent: 'purple' | 'mint' | 'pink' | 'blue' | 'amber' | 'emerald';
   demoVideo?: string;
+  demoPoster?: string;
   demoImage?: string;
   comingSoon?: boolean;
   visualLabel?: string;
@@ -24,6 +25,7 @@ const {
   github,
   accent,
   demoVideo,
+  demoPoster,
   demoImage,
   comingSoon = false,
   visualLabel = 'Project',
@@ -131,6 +133,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
                   loop
                   playsinline
                   preload="metadata"
+                  poster={demoPoster}
                   aria-label={`Demonstration of ${title}`}
                 >
                   <source src={demoVideo} type={videoType} />

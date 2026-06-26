@@ -6,17 +6,19 @@ import ProjectCard        from '../components/ProjectCard.astro';
 import SolarSystem        from '../components/SolarSystem.astro';
 import '../styles/global.css';
 
-const springDemoVideo = '/videos/physics-spring-demo.mp4';
-const copylensDemoVideo = '/videos/copylens-demo.mov';
-const wemoCheckDemoVideo = '/videos/wemo-check-demo.mov';
-const aptrankNycDemoVideo = '/videos/aptrank-nyc-demo.mov';
-const physicsMotionDemoVideo = '/videos/physics-motion-demo.mp4';
-const openaiRagDemoVideo = '/videos/openai-rag-demo.mov';
-const expressionDetectionDemoVideo = '/videos/expression-detection-demo.mov';
-const linearRegressionDemoImage = '/screenshots/linear-regression-stars.png';
-const automatedGscDemoImage = '/screenshots/automated-gsc.png';
-const superstoreDemoImage = '/screenshots/superstore-profitability.png';
-const physicsRagDemoImage = '/screenshots/physics-rag.png';
+// Lightweight thumbnails for the homepage; full videos live on each project page.
+const seoWriterThumb = '/thumbnails/seo-writer.jpg';
+const springThumb = '/thumbnails/physics-spring.jpg';
+const copylensThumb = '/thumbnails/copylens.jpg';
+const wemoCheckThumb = '/thumbnails/wemo-check.jpg';
+const aptrankNycThumb = '/thumbnails/aptrank-nyc.jpg';
+const physicsMotionThumb = '/thumbnails/physics-motion.jpg';
+const openaiRagThumb = '/thumbnails/openai-rag.jpg';
+const expressionDetectionThumb = '/thumbnails/expression-detection.jpg';
+const linearRegressionDemoImage = '/thumbnails/linear-regression-stars.jpg';
+const automatedGscDemoImage = '/thumbnails/automated-gsc.jpg';
+const superstoreDemoImage = '/thumbnails/superstore-profitability.jpg';
+const physicsRagDemoImage = '/thumbnails/physics-rag.jpg';
 
 const activeDevelopment = [
   {
@@ -24,7 +26,8 @@ const activeDevelopment = [
     description: 'Multi-mode article and landing page optimiser with structured templates for SEO-first writing.',
     tags:        ['NLP', 'SEO', 'Tools'],
     github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
-    demoVideo:   '/videos/seo-writer-demo.mp4',
+    demoImage:   seoWriterThumb,
+    hasVideo:    true,
     page:        '/projects/seo-writer',
     accent:      'emerald',
   },
@@ -63,7 +66,8 @@ const finished = [
     description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
     tags:        ['NLP', 'SEO', 'GPT'],
     github:      'https://github.com/MariamKhubashvilii/Brand-Mirror',
-    demoVideo:   copylensDemoVideo,
+    demoImage:   copylensThumb,
+    hasVideo:    true,
     page:        '/projects/copylens',
     accent:      'purple',
   },
@@ -72,7 +76,8 @@ const finished = [
     description: 'A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather.',
     tags:        ['ML', 'Streamlit', 'Anthropic'],
     github:      'https://github.com/MariamKhubashvilii/Wemo-Check',
-    demoVideo:   wemoCheckDemoVideo,
+    demoImage:   wemoCheckThumb,
+    hasVideo:    true,
     page:        '/projects/wemo-check',
     accent:      'mint',
   },
@@ -81,7 +86,8 @@ const finished = [
     description: 'Apartment ranking tool for NYC that scores units across transit, price, and neighbourhood factors.',
     tags:        ['Data', 'Python', 'Tools'],
     github:      'https://github.com/MariamKhubashvilii/Apartment-Search',
-    demoVideo:   aptrankNycDemoVideo,
+    demoImage:   aptrankNycThumb,
+    hasVideo:    true,
     page:        '/projects/aptrank-nyc',
     accent:      'amber',
   },
@@ -90,7 +96,8 @@ const finished = [
     description: 'Interactive spring simulator with webcam hand tracking, live physics values, and damping visualization.',
     tags:        ['Python', 'OpenCV', 'MediaPipe'],
     github:      'https://github.com/MariamKhubashvilii/Physics-Spring',
-    demoVideo:   springDemoVideo,
+    demoImage:   springThumb,
+    hasVideo:    true,
     page:        '/projects/physics-spring',
     accent:      'purple',
   },
@@ -126,7 +133,8 @@ const finished = [
     description: 'A fun hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall.',
     tags:        ['Python', 'Physics', 'Simulation'],
     github:      'https://github.com/MariamKhubashvilii/Physics-Motion',
-    demoVideo:   physicsMotionDemoVideo,
+    demoImage:   physicsMotionThumb,
+    hasVideo:    true,
     page:        '/projects/physics-motion',
     accent:      'mint',
   },
@@ -135,7 +143,8 @@ const finished = [
     description: 'Retrieval-Augmented Generation chatbot using OpenAI embeddings and semantic search for intelligent document retrieval.',
     tags:        ['RAG', 'OpenAI', 'AI'],
     github:      'https://github.com/MariamKhubashvilii/openai-rag',
-    demoVideo:   openaiRagDemoVideo,
+    demoImage:   openaiRagThumb,
+    hasVideo:    true,
     page:        '/projects/openai-rag',
     accent:      'purple',
   },
@@ -144,7 +153,8 @@ const finished = [
     description: 'Real-time facial expression detection using dlib facial landmarks for emotion recognition.',
     tags:        ['Computer Vision', 'ML', 'dlib'],
     github:      'https://github.com/MariamKhubashvilii/expression-detection',
-    demoVideo:   expressionDetectionDemoVideo,
+    demoImage:   expressionDetectionThumb,
+    hasVideo:    true,
     page:        '/projects/expression-detection',
     accent:      'pink',
   },
@@ -210,7 +220,7 @@ const finished = [
                 tags={[...p.tags]}
                 github={p.github}
                 demo={p.demo}
-                demoVideo={p.demoVideo}
+                hasVideo={p.hasVideo}
                 demoImage={p.demoImage}
                 comingSoon={p.comingSoon}
                 page={p.page}
@@ -231,7 +241,7 @@ const finished = [
                 tags={[...p.tags]}
                 github={p.github}
                 demo={p.demo}
-                demoVideo={p.demoVideo}
+                hasVideo={p.hasVideo}
                 demoImage={p.demoImage}
                 comingSoon={p.comingSoon}
                 page={p.page}
