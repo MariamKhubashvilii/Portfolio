@@ -534,6 +534,18 @@ const c = accentMap[accent];
       raf = requestAnimationFrame(draw);
     }
 
+    // Pause halo loop when tab is hidden, resume on return
+    let haloPaused = false;
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        haloPaused = true;
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+      } else {
+        haloPaused = false;
+        if ((activeCard || fadingCard) && !raf) draw();
+      }
+    });
+
     function onEnter(e: Event) {
       const card = e.currentTarget as HTMLElement;
       activeCard = card;
@@ -541,7 +553,7 @@ const c = accentMap[accent];
       fading = false;
       lifting = true;
       liftStart = performance.now();
-      if (!raf) draw();
+      if (!raf && !haloPaused) draw();
     }
 
     function onLeave() {
