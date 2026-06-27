@@ -1,5 +1,7 @@
 ---
 // ProjectCard.astro
+import { Image } from 'astro:assets';
+
 interface Props {
   title:       string;
   description: string;
@@ -42,25 +44,29 @@ const c = accentMap[accent];
     </div>
 
     <div class="screenshot" aria-hidden="true">
-        {demoImage ? (
-          <div class="thumb-wrap">
-            <img
-              class="screenshot-image"
-              src={demoImage}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-            {hasVideo && page && (
-              <a class="thumb-fs" href={page}>Go to the page to see the full video →</a>
-            )}
-          </div>
-        ) : comingSoon ? (
-          <div class="comingsoon-thumb">No cool demos yet</div>
-        ) : (
-          <div class="placeholder">Screenshot</div>
-        )}
-      </div>
+      {demoImage ? (
+        <div class="thumb-wrap">
+          <Image
+            class="screenshot-image"
+            src={demoImage}
+            alt=""
+            width={600}
+            height={340}
+            format="webp"
+            quality={82}
+            loading="lazy"
+            decoding="async"
+          />
+          {hasVideo && page && (
+            <a class="thumb-fs" href={page}>Go to the page to see the full video →</a>
+          )}
+        </div>
+      ) : comingSoon ? (
+        <div class="comingsoon-thumb">No cool demos yet</div>
+      ) : (
+        <div class="placeholder">Screenshot</div>
+      )}
+    </div>
 
     <div class="tags">
       {tags.map(t => <span class="tag mono">{t}</span>)}
@@ -88,6 +94,9 @@ const c = accentMap[accent];
   .project-card-wrapper {
     position: relative;
     width: 100%;
+    /* Promote each card to its own compositor layer so hover transforms
+       don't trigger repaints on sibling cards or background canvases */
+    will-change: transform;
   }
 
   .halo {
@@ -113,6 +122,7 @@ const c = accentMap[accent];
     position: relative;
     overflow: hidden;
     cursor: default;
+    will-change: transform;
     transition:
       border-color 0.3s ease,
       transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -140,7 +150,6 @@ const c = accentMap[accent];
     transition: opacity 0.35s ease;
   }
 
-  /* Hover glow using a pseudo-element so it doesn't affect layout */
   .project-card::after {
     content: '';
     position: absolute;
@@ -155,7 +164,6 @@ const c = accentMap[accent];
   .project-card:hover {
     border-color: var(--dot);
     transform: translateY(-5px);
-    /* show canvas only on hover for desktop via JS */
   }
 
   .project-card:hover {
@@ -339,7 +347,6 @@ const c = accentMap[accent];
 </style>
 
 <script>
-  // Floating halo canvas attached to document.body so it never clips
   if (typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches) {
     let globalCanvas = document.getElementById('project-halo-canvas') as HTMLCanvasElement | null;
     if (!globalCanvas) {
@@ -371,8 +378,6 @@ const c = accentMap[accent];
 
     const cards = document.querySelectorAll('.project-card');
     let activeCard: HTMLElement | null = null;
-    // Keep a reference to the last active card during fade-out so draw()
-    // can still call getBoundingClientRect() without crashing.
     let fadingCard: HTMLElement | null = null;
     let raf: number | null = null;
     let angle = 0;
@@ -404,22 +409,17 @@ const c = accentMap[accent];
     function draw() {
       ctx.clearRect(0, 0, (globalCanvas as HTMLCanvasElement).width, (globalCanvas as HTMLCanvasElement).height);
 
-      // Determine which card to draw against: active takes priority, then
-      // fadingCard lets us keep rendering during the fade-out transition.
       const renderCard = activeCard ?? fadingCard;
 
       if (!renderCard) {
-        // Nothing to draw and nothing fading — stop the loop.
         if (raf) { cancelAnimationFrame(raf); raf = null; }
         return;
       }
 
       if (!activeCard && fading) {
-        // Fade-out in progress: tick the opacity down.
         const t = Math.min(1, (performance.now() - fadeStart) / fadeDuration);
         (globalCanvas as HTMLCanvasElement).style.opacity = String(1 - t);
         if (t >= 1) {
-          // Fade complete — clean up fully.
           fading = false;
           fadingCard = null;
           (globalCanvas as HTMLCanvasElement).style.opacity = '0';
@@ -436,7 +436,6 @@ const c = accentMap[accent];
       const glowColor = getComputedStyle(renderCard).getPropertyValue('--dot') || '#fff';
       const lineColor = getComputedStyle(renderCard).getPropertyValue('--line') || glowColor;
 
-      // draw noisy brush halo
       ctx.save();
       ctx.translate(params.cx, params.cy);
       ctx.rotate(params.rot);
@@ -445,13 +444,10 @@ const c = accentMap[accent];
         const offset = (i - 1.5) * 4;
         ctx.beginPath();
         ctx.ellipse(
-          0,
-          0,
+          0, 0,
           params.rx + offset + (Math.random() - 0.5) * 8,
           params.ry + offset * 0.28 + (Math.random() - 0.5) * 6,
-          0,
-          0,
-          Math.PI * 2
+          0, 0, Math.PI * 2
         );
         ctx.strokeStyle = glowColor;
         ctx.lineWidth = 2 + Math.random() * 2;
@@ -471,10 +467,8 @@ const c = accentMap[accent];
       ctx.restore();
       ctx.globalCompositeOperation = 'source-over';
 
-      // planet position on orbit
       const orbitPos = orbitPosition(params, angle);
 
-      // dot starting point — only needed when activeCard is present (lifting phase)
       let px = orbitPos.x;
       let py = orbitPos.y;
       if (lifting && activeCard) {
@@ -489,7 +483,6 @@ const c = accentMap[accent];
         py = startY + (orbitPos.y - startY) * ease;
       }
 
-      // draw textured planet
       const pr = Math.max(6, Math.min(14, Math.min(cardRect.width, cardRect.height) * 0.04));
       const planetGrad = ctx.createRadialGradient(px - pr * 0.2, py - pr * 0.2, pr * 0.1, px, py, pr);
       planetGrad.addColorStop(0, 'rgba(255,255,255,0.9)');
@@ -504,7 +497,6 @@ const c = accentMap[accent];
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // spinning surface band
       ctx.save();
       ctx.translate(px, py);
       ctx.rotate(angle * 3.2);
@@ -515,7 +507,6 @@ const c = accentMap[accent];
       ctx.stroke();
       ctx.restore();
 
-      // planet texture speckles
       for (let i = 0; i < 5; i++) {
         const loc = Math.random() * Math.PI * 2;
         const offsetRadius = pr * 0.55 * Math.random();
@@ -524,14 +515,12 @@ const c = accentMap[accent];
           px + Math.cos(loc) * offsetRadius * 0.7,
           py + Math.sin(loc) * offsetRadius * 0.4,
           Math.random() * (pr * 0.12) + 0.8,
-          0,
-          Math.PI * 2
+          0, Math.PI * 2
         );
         ctx.fillStyle = 'rgba(255,255,255,0.18)';
         ctx.fill();
       }
 
-      // highlight glow
       const highlight = ctx.createRadialGradient(px - pr * 0.25, py - pr * 0.25, pr * 0.08, px - pr * 0.25, py - pr * 0.25, pr * 0.55);
       highlight.addColorStop(0, 'rgba(255,255,255,0.7)');
       highlight.addColorStop(1, 'rgba(255,255,255,0)');
@@ -540,7 +529,6 @@ const c = accentMap[accent];
       ctx.arc(px - pr * 0.22, py - pr * 0.22, pr * 0.65, 0, Math.PI * 2);
       ctx.fill();
 
-      // advance angle
       if (!lifting) angle += 0.016;
       else if (performance.now() - liftStart >= liftDuration) lifting = false;
 
@@ -550,7 +538,7 @@ const c = accentMap[accent];
     function onEnter(e: Event) {
       const card = (e.currentTarget as HTMLElement);
       activeCard = card;
-      fadingCard = null; // cancel any in-progress fade
+      fadingCard = null;
       fading = false;
       lifting = true;
       liftStart = performance.now();
@@ -558,12 +546,11 @@ const c = accentMap[accent];
     }
 
     function onLeave() {
-      fadingCard = activeCard; // keep the ref alive for fade-out drawing
+      fadingCard = activeCard;
       activeCard = null;
       lifting = false;
       fading = true;
       fadeStart = performance.now();
-      // raf is already running; draw() will handle the fade and stop itself
     }
 
     cards.forEach(card => {
