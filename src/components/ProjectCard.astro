@@ -371,6 +371,9 @@ const c = accentMap[accent];
 
     const cards = document.querySelectorAll('.project-card');
     let activeCard: HTMLElement | null = null;
+    // Keep a reference to the last active card during fade-out so draw()
+    // can still call getBoundingClientRect() without crashing.
+    let fadingCard: HTMLElement | null = null;
     let raf: number | null = null;
     let angle = 0;
     let lifting = false;
@@ -384,8 +387,8 @@ const c = accentMap[accent];
       const w = cardRect.width;
       const h = cardRect.height;
       const cx = cardRect.right - w * 0.08;
-      const cy = cardRect.top + h * 0.04; // slightly lower, still cutting through the edge
-      const r = Math.min(w, h) * 0.22; // smaller so it sits outside the corner
+      const cy = cardRect.top + h * 0.04;
+      const r = Math.min(w, h) * 0.22;
       return { cx, cy, rx: r, ry: r * 0.42, rot: 0.42 };
     }
 
@@ -401,29 +404,37 @@ const c = accentMap[accent];
     function draw() {
       ctx.clearRect(0, 0, (globalCanvas as HTMLCanvasElement).width, (globalCanvas as HTMLCanvasElement).height);
 
-      if (!activeCard) {
-        if (fading) {
-          const t = Math.min(1, (performance.now() - fadeStart) / fadeDuration);
-          (globalCanvas as HTMLCanvasElement).style.opacity = String(1 - t);
-          if (t >= 1) {
-            fading = false;
-            (globalCanvas as HTMLCanvasElement).style.opacity = '0';
-            if (raf) { cancelAnimationFrame(raf); raf = null; }
-            return;
-          }
-        } else {
+      // Determine which card to draw against: active takes priority, then
+      // fadingCard lets us keep rendering during the fade-out transition.
+      const renderCard = activeCard ?? fadingCard;
+
+      if (!renderCard) {
+        // Nothing to draw and nothing fading — stop the loop.
+        if (raf) { cancelAnimationFrame(raf); raf = null; }
+        return;
+      }
+
+      if (!activeCard && fading) {
+        // Fade-out in progress: tick the opacity down.
+        const t = Math.min(1, (performance.now() - fadeStart) / fadeDuration);
+        (globalCanvas as HTMLCanvasElement).style.opacity = String(1 - t);
+        if (t >= 1) {
+          // Fade complete — clean up fully.
+          fading = false;
+          fadingCard = null;
+          (globalCanvas as HTMLCanvasElement).style.opacity = '0';
           if (raf) { cancelAnimationFrame(raf); raf = null; }
           return;
         }
-      } else {
+      } else if (activeCard) {
         (globalCanvas as HTMLCanvasElement).style.opacity = '1';
       }
 
-      const cardRect = activeCard.getBoundingClientRect();
+      const cardRect = renderCard.getBoundingClientRect();
       const params = computeOrbitParamsForCard(cardRect);
 
-      const glowColor = getComputedStyle(activeCard).getPropertyValue('--dot') || '#fff';
-      const lineColor = getComputedStyle(activeCard).getPropertyValue('--line') || glowColor;
+      const glowColor = getComputedStyle(renderCard).getPropertyValue('--dot') || '#fff';
+      const lineColor = getComputedStyle(renderCard).getPropertyValue('--line') || glowColor;
 
       // draw noisy brush halo
       ctx.save();
@@ -463,15 +474,14 @@ const c = accentMap[accent];
       // planet position on orbit
       const orbitPos = orbitPosition(params, angle);
 
-      // dot starting point
-      const dotEl = activeCard.querySelector('.dot') as HTMLElement;
-      const dotRect = dotEl.getBoundingClientRect();
-      const startX = dotRect.left + dotRect.width / 2;
-      const startY = dotRect.top + dotRect.height / 2;
-
+      // dot starting point — only needed when activeCard is present (lifting phase)
       let px = orbitPos.x;
       let py = orbitPos.y;
-      if (lifting) {
+      if (lifting && activeCard) {
+        const dotEl = activeCard.querySelector('.dot') as HTMLElement;
+        const dotRect = dotEl.getBoundingClientRect();
+        const startX = dotRect.left + dotRect.width / 2;
+        const startY = dotRect.top + dotRect.height / 2;
         const now = performance.now();
         const t = Math.min(1, (now - liftStart) / liftDuration);
         const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
@@ -531,7 +541,7 @@ const c = accentMap[accent];
       ctx.fill();
 
       // advance angle
-      if (!lifting) angle += 0.016; // slower orbit
+      if (!lifting) angle += 0.016;
       else if (performance.now() - liftStart >= liftDuration) lifting = false;
 
       raf = requestAnimationFrame(draw);
@@ -540,17 +550,20 @@ const c = accentMap[accent];
     function onEnter(e: Event) {
       const card = (e.currentTarget as HTMLElement);
       activeCard = card;
+      fadingCard = null; // cancel any in-progress fade
+      fading = false;
       lifting = true;
       liftStart = performance.now();
-      fading = false;
       if (!raf) draw();
     }
 
     function onLeave() {
-      fading = true;
-      fadeStart = performance.now();
+      fadingCard = activeCard; // keep the ref alive for fade-out drawing
       activeCard = null;
       lifting = false;
+      fading = true;
+      fadeStart = performance.now();
+      // raf is already running; draw() will handle the fade and stop itself
     }
 
     cards.forEach(card => {
