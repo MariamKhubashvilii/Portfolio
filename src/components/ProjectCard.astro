@@ -94,8 +94,6 @@ const c = accentMap[accent];
   .project-card-wrapper {
     position: relative;
     width: 100%;
-    /* Promote each card to its own compositor layer so hover transforms
-       don't trigger repaints on sibling cards or background canvases */
     will-change: transform;
   }
 
@@ -376,7 +374,8 @@ const c = accentMap[accent];
     resizeGlobal();
     window.addEventListener('resize', resizeGlobal);
 
-    const cards = document.querySelectorAll('.project-card');
+    // Typed as HTMLElement so .dataset and keyboard events work without errors
+    const cards = document.querySelectorAll<HTMLElement>('.project-card');
     let activeCard: HTMLElement | null = null;
     let fadingCard: HTMLElement | null = null;
     let raf: number | null = null;
@@ -536,7 +535,7 @@ const c = accentMap[accent];
     }
 
     function onEnter(e: Event) {
-      const card = (e.currentTarget as HTMLElement);
+      const card = e.currentTarget as HTMLElement;
       activeCard = card;
       fadingCard = null;
       fading = false;
@@ -564,7 +563,7 @@ const c = accentMap[accent];
           window.location.href = pageUrl;
         });
 
-        card.addEventListener('keydown', (event) => {
+        card.addEventListener('keydown', (event: KeyboardEvent) => {
           if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             window.location.href = pageUrl;

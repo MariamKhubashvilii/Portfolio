@@ -21,10 +21,12 @@
     const canvas = document.getElementById('constellation') as HTMLCanvasElement;
     const ctx    = canvas.getContext('2d')!;
 
+    // Gradient cache — keyed by "ci-si", busted on resize
+    const starGradientCache = new Map<string, CanvasGradient>();
+
     function resize() {
       canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
-      // Cached gradients are size-dependent — bust them on resize
       starGradientCache.clear();
     }
     resize();
@@ -34,26 +36,29 @@
     let rafId: number | null = null;
     let paused = false;
 
-    // Pause/resume helpers shared by both branches
     function pause() {
       paused = true;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     }
-    function resume(drawFn: () => void) {
+
+    // Hoist both loop stubs so visibilitychange can reference them
+    // regardless of which branch defines the real implementation below.
+    let drawMobileLoop  = () => {};
+    let drawDesktopLoop = () => {};
+
+    function resume() {
       if (paused) {
         paused = false;
-        if (!rafId) drawFn();
+        if (!rafId) {
+          if (isMobile) drawMobileLoop();
+          else          drawDesktopLoop();
+        }
       }
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        pause();
-      } else {
-        // re-attach the correct draw fn depending on branch
-        if (isMobile) resume(drawMobileLoop);
-        else          resume(drawDesktopLoop);
-      }
+      if (document.hidden) pause();
+      else                 resume();
     });
 
     // ─── Mobile: dynamic connections between project nodes ───────────────────
@@ -61,7 +66,7 @@
       const activeNodes: { x: number; y: number }[] = [];
       let t = 0;
 
-      function drawMobileLoop() {
+      drawMobileLoop = function loop() {
         if (paused) { rafId = null; return; }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         t += 0.015;
@@ -93,8 +98,9 @@
           });
         }
 
-        rafId = requestAnimationFrame(drawMobileLoop);
-      }
+        rafId = requestAnimationFrame(loop);
+      };
+
       drawMobileLoop();
 
       (window as any).registerConstellationNode = (x: number, y: number) => {
@@ -154,9 +160,6 @@
         }
       ];
 
-      // Cache star gradients keyed by "ci-si" — recreated only on resize
-      const starGradientCache = new Map<string, CanvasGradient>();
-
       function buildGradient(ci: number, si: number, x: number, y: number, r: number) {
         const key = `${ci}-${si}`;
         if (starGradientCache.has(key)) return starGradientCache.get(key)!;
@@ -170,13 +173,12 @@
 
       let t = 0;
 
-      function drawDesktopLoop() {
+      drawDesktopLoop = function loop() {
         if (paused) { rafId = null; return; }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         t += 0.01;
 
         constellations.forEach((cons, ci) => {
-          // Draw lines
           cons.lines.forEach(([a, b]) => {
             const A = cons.stars[a];
             const B = cons.stars[b];
@@ -189,13 +191,11 @@
             ctx.stroke();
           });
 
-          // Draw stars — reuse cached gradients, only vary alpha via globalAlpha
           cons.stars.forEach((s, si) => {
             const x = s.x * canvas.width;
             const y = s.y * canvas.height;
             const pulse = 0.6 + 0.4 * Math.sin(t * 1.6 + ci * 0.5 + si);
             const r = 1.6 + 1.4 * (pulse - 0.6);
-
             ctx.globalAlpha = pulse;
             ctx.beginPath();
             ctx.fillStyle = buildGradient(ci, si, x, y, r);
@@ -205,14 +205,10 @@
           });
         });
 
-        rafId = requestAnimationFrame(drawDesktopLoop);
-      }
+        rafId = requestAnimationFrame(loop);
+      };
 
       drawDesktopLoop();
     }
-
-    // Declare after both branches so the mobile branch can reference it
-    function drawMobileLoop() {} // hoisted stub — real one defined inside isMobile block
-    const starGradientCache = new Map<string, CanvasGradient>();
   }
 </script>
