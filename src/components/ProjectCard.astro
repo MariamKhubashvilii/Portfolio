@@ -352,25 +352,25 @@ const c = accentMap[accent];
     display: none;
   }
 
-  @media (max-width: 767px) {
-    /* Disable hover-expand and transform on touch — button handles navigation */
+  @media (max-width: 767px), (hover: none) {
+    /* Kill all hover behaviour on touch devices */
     .project-card:hover {
-      transform: none;
-      padding-bottom: 28px;
-      border-color: var(--border);
+      transform: none !important;
+      padding-bottom: 28px !important;
+      border-color: var(--border) !important;
     }
     .project-card:hover .screenshot {
-      height: 0;
-      opacity: 0;
+      height: 160px !important;
+      opacity: 1 !important;
     }
     .project-card:hover::after {
-      opacity: 0;
+      opacity: 0 !important;
     }
     .project-card:hover .dot {
-      opacity: 1;
+      opacity: 0 !important;
     }
 
-    /* Always show screenshot on mobile */
+    /* Always show screenshot */
     .screenshot {
       height: 160px;
       opacity: 1;
