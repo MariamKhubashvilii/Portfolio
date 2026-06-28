@@ -91,10 +91,6 @@ const c = accentMap[accent];
     {page && (
       <a class="mobile-visit mono" href={page}>visit page →</a>
     )}
-
-    {page && (
-      <span class="see-details mono">see details →</span>
-    )}
   </article>
 </div>
 
@@ -349,31 +345,6 @@ const c = accentMap[accent];
 
   .link:hover {
     opacity: 1;
-  }
-
-  /* Desktop-only "see details" ghost affordance */
-  .see-details {
-    display: none;
-  }
-
-  @media (min-width: 768px) and (hover: hover) {
-    .see-details {
-      display: block;
-      position: absolute;
-      bottom: 20px;
-      right: 24px;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      color: var(--text-faint);
-      opacity: 0.35;
-      transition: opacity 0.2s ease, color 0.2s ease;
-      pointer-events: none;
-    }
-
-    .project-card:hover .see-details {
-      opacity: 1;
-      color: var(--dot);
-    }
   }
 
   /* Mobile-only visit page button */
