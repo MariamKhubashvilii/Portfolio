@@ -353,6 +353,23 @@ const c = accentMap[accent];
   }
 
   @media (max-width: 767px) {
+    /* Disable hover-expand and transform on touch — button handles navigation */
+    .project-card:hover {
+      transform: none;
+      padding-bottom: 28px;
+      border-color: var(--border);
+    }
+    .project-card:hover .screenshot {
+      height: 0;
+      opacity: 0;
+    }
+    .project-card:hover::after {
+      opacity: 0;
+    }
+    .project-card:hover .dot {
+      opacity: 1;
+    }
+
     .mobile-visit {
       display: inline-block;
       margin-top: 16px;
@@ -366,7 +383,7 @@ const c = accentMap[accent];
       opacity: 0.8;
       transition: opacity 0.2s;
     }
-    .mobile-visit:hover {
+    .mobile-visit:active {
       opacity: 1;
     }
   }
