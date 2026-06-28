@@ -87,6 +87,10 @@ const c = accentMap[accent];
         </a>
       )}
     </div>
+
+    {page && (
+      <a class="mobile-visit mono" href={page}>visit page →</a>
+    )}
   </article>
 </div>
 
@@ -341,6 +345,30 @@ const c = accentMap[accent];
 
   .link:hover {
     opacity: 1;
+  }
+
+  /* Mobile-only visit page button */
+  .mobile-visit {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .mobile-visit {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 0.5px solid var(--dot);
+      color: var(--dot);
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .mobile-visit:hover {
+      opacity: 1;
+    }
   }
 </style>
 
