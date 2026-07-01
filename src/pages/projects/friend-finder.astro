@@ -1,89 +1,350 @@
 ---
 import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/FR Chat Demo.mp4';
 ---
 
 <ProjectDetail
-  title="Friend Finder"
-  description="A fully local, self-hosted RAG chat widget that answers questions about a website's content — no external APIs, embedded on a WordPress site to help reconnect old friends."
-  tags={['RAG', 'Ollama', 'ChromaDB', 'FastAPI']}
+  title="Friends Reconnected AI Chatbot"
+  description="Production Retrieval-Augmented Generation (RAG) chatbot that scrapes a live WordPress website, indexes its content with vector embeddings, and delivers context-aware answers through a streaming conversational interface."
+  tags={[
+    'RAG',
+    'FastAPI',
+    'ChromaDB',
+    'Groq',
+    'Ollama',
+    'Playwright',
+    'WordPress',
+    'Render'
+  ]}
   github="https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot"
-  accent="pink"
-  comingSoon={true}
+  liveDemo="https://friendsreconnected.co.uk/chat/"
+  liveDemoLabel="Live Chat"
+  accent="emerald"
+  demoVideo={demoVideo}
+  demoPoster="/thumbnails/FR Chat Screenshot.jpeg"
 >
+
   <section class="project-grid">
+
     <article class="project-card summary-card">
-      <h2>Project summary</h2>
+      <h2>Project Summary</h2>
+
       <p>
-        Friend Finder is a fully local, self-hosted chatbot that answers questions about website content without relying on external APIs. It combines web scraping, vector embeddings, and a local language model into a privacy-first, cost-effective solution — deployed as a widget on the Friends Reconnected WordPress site.
+        Friends Reconnected AI is a production Retrieval-Augmented Generation
+        (RAG) chatbot built for a UK tracing service. Instead of relying solely
+        on an LLM, the application retrieves relevant information directly from
+        the company's website before generating responses, reducing
+        hallucinations while keeping answers grounded in real content.
       </p>
+
       <div class="summary-list">
+
         <div>
-          <strong>Fully local</strong>
-          <p>No cloud dependencies or API fees — scraping, embeddings, and the LLM all run on your own machine.</p>
+          <strong>Production-ready RAG pipeline</strong>
+          <p>
+            Automatically scrapes the website, chunks content, generates vector
+            embeddings, stores them inside ChromaDB, retrieves the most relevant
+            context and streams responses using Groq.
+          </p>
         </div>
+
         <div>
-          <strong>Smart updates</strong>
-          <p>MD5 fingerprints detect what changed, so new pages can be added without re-embedding the whole database.</p>
+          <strong>Live customer support</strong>
+          <p>
+            Embedded directly into the Friends Reconnected WordPress website,
+            providing visitors with instant answers while linking back to the
+            original website pages.
+          </p>
         </div>
+
       </div>
+
     </article>
 
     <article class="project-card detail-card">
-      <h2>What this project shows</h2>
+      <h2>Highlights</h2>
+
       <ul>
-        <li>JavaScript-aware scraping with Playwright and BeautifulSoup.</li>
-        <li>Incremental indexing with content-change detection.</li>
-        <li>Streaming token responses over Server-Sent Events.</li>
-        <li>WordPress integration as an embeddable iframe widget.</li>
+        <li>Production Retrieval-Augmented Generation (RAG)</li>
+        <li>Automatic website scraping with Playwright</li>
+        <li>Persistent ChromaDB vector database</li>
+        <li>Streaming responses using FastAPI SSE</li>
+        <li>Confidence-based clarification workflow</li>
+        <li>Source attribution for generated answers</li>
+        <li>Embedded directly into WordPress</li>
       </ul>
+
     </article>
+
   </section>
 
   <section class="project-section">
+
     <div class="section-content">
-      <h2>How it works</h2>
+
+      <h2>System Architecture</h2>
+
       <p>
-        The system runs in three stages: Playwright scrapes JavaScript-rendered pages and BeautifulSoup extracts clean text; sentence-transformers convert text chunks into embeddings stored in ChromaDB; and incoming questions are embedded, matched against stored vectors, and answered by a local Ollama model with streaming responses.
+        The chatbot follows a Retrieval-Augmented Generation architecture.
+        Website content is periodically scraped, cleaned and chunked before
+        being embedded into a persistent ChromaDB collection. At runtime, each
+        user query is embedded, relevant chunks are retrieved through semantic
+        similarity search and injected into the prompt sent to Groq's LLM.
       </p>
 
       <div class="section-grid">
+
         <div>
-          <h3>Pipeline</h3>
+
+          <h3>Backend</h3>
+
           <ul>
-            <li>Scrape via explicit URLs, sitemaps, or recursive crawl</li>
-            <li>Chunk and embed with all-MiniLM-L6-v2</li>
-            <li>Store vectors in persistent local ChromaDB</li>
-            <li>Answer with Ollama (Llama 3.2 / Mistral), streamed</li>
+            <li>FastAPI API</li>
+            <li>Server-Sent Events streaming</li>
+            <li>ChromaDB vector retrieval</li>
+            <li>Conversation history</li>
+            <li>Confidence scoring</li>
+            <li>Clarification workflow</li>
+
           </ul>
+
         </div>
 
         <div>
-          <h3>Tech stack</h3>
+
+          <h3>Pipeline</h3>
+
           <ul>
-            <li>Scraping: Playwright + BeautifulSoup</li>
-            <li>Embeddings: sentence-transformers</li>
-            <li>Backend: FastAPI with Server-Sent Events</li>
-            <li>Frontend: vanilla HTML/JavaScript widget</li>
+            <li>Playwright website scraper</li>
+            <li>BeautifulSoup HTML parsing</li>
+            <li>Content cleaning & chunking</li>
+            <li>Ollama embeddings</li>
+            <li>Groq inference</li>
+            <li>WordPress integration</li>
           </ul>
+
         </div>
+
       </div>
+
     </div>
+
+  </section>
+
+  <section class="project-section">
+
+    <div class="section-content">
+
+      <h2>Engineering Decisions</h2>
+
+      <p>
+        Rather than selecting tools solely based on popularity, each component
+        was chosen according to deployment simplicity, development speed and
+        operational cost while keeping the system production-ready.
+      </p>
+
+      <div class="section-grid">
+
+        <div>
+
+          <h3>Technology Choices</h3>
+
+          <ul>
+            <li><strong>Playwright</strong> — reliably renders JavaScript-heavy pages before extraction.</li>
+
+            <li><strong>BeautifulSoup</strong> — lightweight HTML parsing after rendering.</li>
+
+            <li><strong>ChromaDB</strong> — persistent vector storage with minimal operational overhead.</li>
+
+            <li><strong>Groq</strong> — extremely fast inference and generous free tier.</li>
+
+            <li><strong>FastAPI</strong> — asynchronous API with native streaming support.</li>
+
+          </ul>
+
+        </div>
+
+        <div>
+
+          <h3>Trade-offs</h3>
+
+          <ul>
+
+            <li>Playwright is slower than static scraping but supports dynamic websites.</li>
+
+            <li>ChromaDB is ideal for small-to-medium datasets but isn't intended for massive distributed deployments.</li>
+
+            <li>Local Ollama embeddings eliminate API costs but require a dedicated embedding service.</li>
+
+            <li>Render offers simple deployment but free instances have resource limitations.</li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="project-section">
+
+    <div class="section-content">
+
+      <h2>Request Lifecycle</h2>
+
+      <p>
+        Each user request follows a retrieval pipeline designed to maximise
+        factual accuracy while maintaining low response times. Instead of asking
+        the language model to answer from prior knowledge alone, the system
+        first searches the vector database for the most relevant website
+        content.
+      </p>
+
+      <div class="section-grid">
+
+        <div>
+
+          <h3>Runtime Flow</h3>
+
+          <ul>
+            <li>User sends a question from the embedded widget.</li>
+            <li>The query is converted into a vector embedding.</li>
+            <li>ChromaDB retrieves the most relevant content.</li>
+            <li>Retrieved context is injected into the prompt.</li>
+            <li>Groq streams the response token-by-token.</li>
+            <li>Relevant source links are returned to the user.</li>
+          </ul>
+
+        </div>
+
+        <div>
+
+          <h3>Fallback Logic</h3>
+
+          <ul>
+            <li>Confidence score calculated after retrieval.</li>
+            <li>Low-confidence matches trigger clarification instead of guessing.</li>
+            <li>Keyword matching supplements semantic retrieval.</li>
+            <li>Suggested follow-up questions improve user experience.</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="project-section">
+
+    <div class="section-content">
+
+      <h2>Production Deployment</h2>
+
+      <p>
+        The chatbot is deployed as a production web service and embedded
+        directly into the Friends Reconnected website. The frontend communicates
+        with a FastAPI backend hosted on Render, while Groq performs language
+        model inference and ChromaDB provides semantic retrieval.
+      </p>
+
+      <div class="section-grid">
+
+        <div>
+
+          <h3>Current Deployment</h3>
+
+          <ul>
+            <li>Frontend embedded into WordPress.</li>
+            <li>FastAPI backend hosted on Render.</li>
+            <li>Persistent ChromaDB vector database.</li>
+            <li>Groq LLM for response generation.</li>
+            <li>Streaming responses via Server-Sent Events.</li>
+          </ul>
+
+        </div>
+
+        <div>
+
+          <h3>Current Development</h3>
+
+          <ul>
+            <li>Migrating embeddings to an AWS-hosted service.</li>
+            <li>Separating embedding generation from the application server.</li>
+            <li>Preparing the system for easier scaling and maintenance.</li>
+            <li>Reducing dependency on local embedding infrastructure.</li>
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </section>
 
   <section class="project-section project-usage">
-    <h2>Run it</h2>
+
+    <h2>Performance & Engineering Considerations</h2>
+
     <p>
-      Install Ollama and pull a model (<code>ollama pull llama3.2</code>), then set up the Python environment. Scrape content with <code>python scrape.py --urls &lt;URLs&gt;</code> (or <code>--sitemap</code> / <code>--crawl</code>), build embeddings with <code>python ingest.py</code>, and launch with <code>uvicorn app:app --reload --port 8000</code>. Add new pages later with <code>--update</code> and the system skips unchanged content.
+      The current architecture prioritises reliability, maintainability and
+      deployment simplicity while leaving room for future optimisation as usage
+      grows.
     </p>
+
     <div class="usage-card">
+
       <div>
-        <strong>Live</strong>
-        <p><a href="https://friendsreconnected.co.uk" target="_blank" rel="noopener noreferrer">friendsreconnected.co.uk</a></p>
+
+        <strong>Potential Performance Improvements</strong>
+
+        <p>
+          Hybrid retrieval (BM25 + vectors), metadata filtering, reranking,
+          embedding caching, improved chunking strategies and asynchronous
+          ingestion can further increase retrieval quality and reduce response
+          latency.
+        </p>
+
       </div>
+
       <div>
-        <strong>Best for</strong>
-        <p>Site owners who want a private, no-API chatbot over their own content.</p>
+
+        <strong>Scalability Roadmap</strong>
+
+        <p>
+          AWS-hosted embeddings, automated scheduled scraping, CI/CD,
+          containerisation, monitoring, analytics and horizontal scaling are
+          planned as the application evolves.
+        </p>
+
       </div>
+
     </div>
+
   </section>
+
+  <section class="project-section">
+
+    <div class="section-content">
+
+      <h2>What This Project Demonstrates</h2>
+
+      <p>
+        Beyond building a chatbot, this project demonstrates end-to-end system
+        design across data ingestion, semantic search, backend development,
+        deployment and user experience. It combines modern LLM tooling with
+        production-oriented engineering decisions, focusing on accuracy,
+        maintainability and scalable architecture rather than simply connecting
+        an API to a language model.
+      </p>
+
+    </div>
+
+  </section>
+
 </ProjectDetail>

@@ -10,6 +10,8 @@ interface Props {
   tags: string[];
   github: string;
   accent: 'purple' | 'mint' | 'pink' | 'blue' | 'amber' | 'emerald';
+  liveDemo?: string;
+  liveDemoLabel?: string;
   demoVideo?: string;
   demoPoster?: string;
   demoImage?: string;
@@ -23,6 +25,8 @@ const {
   description,
   tags,
   github,
+  liveDemo,
+  liveDemoLabel = 'Live Demo',
   accent,
   demoVideo,
   demoPoster,
@@ -103,6 +107,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
 
     <main class="project-detail-page">
       <section class="project-hero">
+
         <div class="hero-copy">
           <a href="/" class="back-link mono">← Back to projects</a>
           <span class="eyebrow mono">// project</span>
@@ -117,6 +122,11 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
             <a class="hero-action" href={github} target="_blank" rel="noopener noreferrer">
               View GitHub ↗
             </a>
+            {liveDemo && (
+              <a class="hero-action" href={liveDemo} target="_blank" rel="noopener noreferrer">
+                {liveDemoLabel} ↗
+              </a>
+            )}
           </div>
         </div>
 
@@ -160,6 +170,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
             )}
           </div>
         </div>
+
       </section>
 
       <slot />
@@ -204,7 +215,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     margin-bottom: 50px;
   }
 
-  .project-hero .back-link {
+  .back-link {
     display: inline-block;
     margin-bottom: 18px;
     color: var(--text-dim);
@@ -252,6 +263,12 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     letter-spacing: 0.06em;
   }
 
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
   .hero-action {
     display: inline-flex;
     align-items: center;
@@ -264,6 +281,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     font-family: var(--mono);
     font-size: 12px;
     letter-spacing: 0.08em;
+    text-decoration: none;
     transition: transform 0.2s ease, background 0.2s ease;
   }
 
@@ -308,14 +326,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     overflow: hidden;
   }
 
-  .hero-video {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    object-fit: contain;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.03);
-  }
-
+  .hero-video,
   .hero-image {
     width: 100%;
     aspect-ratio: 16 / 10;
@@ -373,7 +384,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     max-height: 90vh;
     object-fit: contain;
     border-radius: 16px;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
     cursor: default;
   }
 
@@ -384,8 +395,8 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     width: 44px;
     height: 44px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    background: rgba(255,255,255,0.08);
     color: var(--text);
     font-size: 22px;
     line-height: 1;
@@ -394,7 +405,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
   }
 
   .lightbox-close:hover {
-    background: rgba(255, 255, 255, 0.16);
+    background: rgba(255,255,255,0.16);
   }
 
   .visual-comingsoon {
@@ -402,11 +413,11 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     min-height: 260px;
     aspect-ratio: 16 / 10;
     border-radius: 20px;
-    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border: 0.5px solid rgba(255,255,255,0.08);
     background:
-      radial-gradient(ellipse at 30% 25%, rgba(167, 139, 250, 0.16), transparent 60%),
-      radial-gradient(ellipse at 75% 80%, rgba(249, 168, 212, 0.14), transparent 60%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+      radial-gradient(ellipse at 30% 25%, rgba(167,139,250,0.16), transparent 60%),
+      radial-gradient(ellipse at 75% 80%, rgba(249,168,212,0.14), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
     display: flex;
     flex-direction: column;
     align-items: center;
