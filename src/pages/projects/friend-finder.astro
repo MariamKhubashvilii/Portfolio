@@ -15,7 +15,9 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
     'Ollama',
     'Playwright',
     'WordPress',
-    'Render'
+    'Render',
+    'AWS EC2',
+    'Caddy'
   ]}
   github="https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot"
   liveDemo="https://friendsreconnected.co.uk/chat/"
@@ -161,6 +163,10 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
 
             <li><strong>FastAPI</strong> — asynchronous API with native streaming support.</li>
 
+            <li><strong>AWS EC2</strong> for embeddings, not a third-party API — keeps embedding generation on infrastructure I control; Render can't run a persistent background service like Ollama, so it needed its own home.</li>
+
+            <li><strong>Caddy</strong> as a security layer — Ollama has no built-in auth, so a reverse proxy enforcing a shared-secret bearer token was necessary to expose it safely on a public IP.</li>
+
           </ul>
 
         </div>
@@ -175,7 +181,7 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
 
             <li>ChromaDB is ideal for small-to-medium datasets but isn't intended for massive distributed deployments.</li>
 
-            <li>Local Ollama embeddings eliminate API costs but require a dedicated embedding service.</li>
+            <li>Local Ollama embeddings eliminate API costs, but needed a separate always-on box (AWS EC2) since Render can't host a persistent background service.</li>
 
             <li>Render offers simple deployment but free instances have resource limitations.</li>
 
@@ -243,6 +249,82 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
 
     <div class="section-content">
 
+      <h2>Debugging Highlights</h2>
+
+      <div class="section-grid">
+
+        <div>
+
+          <h3>Hardcoded Localhost in Production</h3>
+
+          <p>
+            The original embedding call was hardcoded to
+            <code>http://localhost:11434</code>, invisible locally (where
+            Ollama runs on localhost) but a silent failure on Render, which has
+            no route to a developer's machine. Fixed by externalizing the
+            endpoint and auth token into environment variables, caught a second
+            time when the variable was found unset in Render's dashboard by
+            reading the startup log line the app prints on connect.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h3>Caddy Directive-Ordering Bug</h3>
+
+          <p>
+            Caddy reorders Caddyfile directives by internal priority rather
+            than written order. An unconditional <code>respond 403</code>
+            fallback meant to run only on failed auth was executing before the
+            token check for every request, because <code>respond</code>
+            outranks <code>reverse_proxy</code> by default. Fixed by wrapping
+            the logic in an explicit <code>route {'{}'}</code> block to
+            preserve written order.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h3>Ollama's Anti-DNS-Rebinding Check</h3>
+
+          <p>
+            After fixing auth, requests still 403'd, this time from Ollama
+            itself, which rejects requests whose Host header isn't
+            <code>localhost</code> or <code>127.0.0.1</code>. Caddy was
+            proxying the client's original Host header through unchanged.
+            Fixed with <code>header_up Host localhost</code> before
+            forwarding.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h3>Double-Slash URL Bug</h3>
+
+          <p>
+            A trailing slash in the frontend's API base URL plus a leading
+            slash in the fetch call produced requests to <code>//chat</code>
+            instead of <code>/chat</code>. FastAPI fell through to the static
+            file handler (GET-only), returning 405 for every chat message.
+            Diagnosed from Render's request logs, fixed by normalizing URL
+            construction.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="project-section">
+
+    <div class="section-content">
+
       <h2>Production Deployment</h2>
 
       <p>
@@ -259,24 +341,25 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
           <h3>Current Deployment</h3>
 
           <ul>
-            <li>Frontend embedded into WordPress.</li>
-            <li>FastAPI backend hosted on Render.</li>
-            <li>Persistent ChromaDB vector database.</li>
-            <li>Groq LLM for response generation.</li>
-            <li>Streaming responses via Server-Sent Events.</li>
+            <li>Frontend embedded into WordPress via iframe.</li>
+            <li>FastAPI backend hosted on Render (auto-deploys from GitHub, automatic HTTPS).</li>
+            <li>Embedding generation runs on a dedicated AWS EC2 instance (Ollama + nomic-embed-text), decoupled from the application server.</li>
+            <li>EC2 embedding endpoint secured behind a Caddy reverse proxy with token authentication, not exposed to the open internet.</li>
+            <li>Persistent ChromaDB vector database (2,000+ indexed chunks) living alongside the FastAPI app.</li>
+            <li>Groq LLM (Llama 3.3 70B) for streamed response generation.</li>
           </ul>
 
         </div>
 
         <div>
 
-          <h3>Current Development</h3>
+          <h3>What's Next</h3>
 
           <ul>
-            <li>Migrating embeddings to an AWS-hosted service.</li>
-            <li>Separating embedding generation from the application server.</li>
-            <li>Preparing the system for easier scaling and maintenance.</li>
-            <li>Reducing dependency on local embedding infrastructure.</li>
+            <li>Elastic IP for the EC2 instance (currently dynamic, would break on restart).</li>
+            <li>TLS on the EC2 reverse proxy (currently HTTP + token auth).</li>
+            <li>Hybrid retrieval (BM25 + vector), reranking, metadata filtering.</li>
+            <li>CI/CD and containerization for the EC2 embedding service.</li>
           </ul>
 
         </div>
@@ -317,9 +400,9 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
         <strong>Scalability Roadmap</strong>
 
         <p>
-          AWS-hosted embeddings, automated scheduled scraping, CI/CD,
-          containerisation, monitoring, analytics and horizontal scaling are
-          planned as the application evolves.
+          Automated scheduled scraping, CI/CD, containerisation, monitoring,
+          analytics and horizontal scaling are planned as the application
+          evolves.
         </p>
 
       </div>
