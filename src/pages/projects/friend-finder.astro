@@ -249,9 +249,9 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
 
     <div class="section-content">
 
-      <h2>Debugging Highlights</h2>
+      <h2>Roadblocks</h2>
 
-      <div class="section-grid">
+      <div class="section-grid roadblocks-grid">
 
         <div>
 
@@ -311,6 +311,25 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
             file handler (GET-only), returning 405 for every chat message.
             Diagnosed from Render's request logs, fixed by normalizing URL
             construction.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h3>Embedding Generation on 8GB RAM</h3>
+
+          <p>
+            With only ~1.3GB free at any given time, embedding the full site
+            content in one pass wasn't viable, and offloading to Google Colab
+            hit the same memory ceiling. Solved by re-architecting
+            <code>ingest.py</code> around small, bounded batches:
+            400-character chunks with 80-character overlap, embedded 4 at a
+            time, with <code>gc.collect()</code> forced every 5 batches and
+            automatic per-batch retry so memory stayed flat and a crash
+            mid-run didn't require starting over. The same
+            memory-conservative design is what made moving embeddings to a
+            dedicated EC2 box worthwhile later.
           </p>
 
         </div>
@@ -431,3 +450,9 @@ const demoVideo = '/videos/FR Chat Demo.mp4';
   </section>
 
 </ProjectDetail>
+
+<style>
+  .roadblocks-grid > div:nth-child(5) {
+    grid-column: 1 / -1;
+  }
+</style>

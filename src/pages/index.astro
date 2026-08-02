@@ -52,8 +52,13 @@ const activeDevelopment = [
   },
 ] as const;
 
+// Display order on the homepage. Lower `order` shows first.
+// Numbers are spaced by 10 on purpose — to slot a new finished project in,
+// just give it a number between two existing ones (e.g. 25 to land between
+// 20 and 30). No need to renumber anything else.
 const finished = [
   {
+    order:       40,
     title:       'CopyLens',
     description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
     tags:        ['NLP', 'SEO', 'GPT'],
@@ -64,6 +69,7 @@ const finished = [
     accent:      'purple',
   },
   {
+    order:       30,
     title:       'Wemo Check',
     description: 'A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather.',
     tags:        ['ML', 'Streamlit', 'Anthropic'],
@@ -74,6 +80,7 @@ const finished = [
     accent:      'mint',
   },
   {
+    order:       90,
     title:       'AptRank NYC',
     description: 'Apartment ranking tool for NYC that scores units across transit, price, and neighbourhood factors.',
     tags:        ['Data', 'Python', 'Tools'],
@@ -84,6 +91,7 @@ const finished = [
     accent:      'amber',
   },
   {
+    order:       70,
     title:       'Physics Spring',
     description: 'Interactive spring simulator with webcam hand tracking, live physics values, and damping visualization.',
     tags:        ['Python', 'OpenCV', 'MediaPipe'],
@@ -94,6 +102,7 @@ const finished = [
     accent:      'purple',
   },
   {
+    order:       20,
     title:       'Automated GSC Data Overview',
     description: 'A small Python tool that pulls week-over-week Google Search Console data and delivers a readable summary via email or WhatsApp.',
     tags:        ['Python', 'GSC', 'Data'],
@@ -103,6 +112,7 @@ const finished = [
     accent:      'blue',
   },
   {
+    order:       100,
     title:       'Superstore Profitability Analysis',
     description: 'Exploratory data analysis and binary classification on the Sample Superstore dataset. Which products or states drive the most profit?',
     tags:        ['Data Science', 'Classification', 'EDA'],
@@ -112,6 +122,7 @@ const finished = [
     accent:      'pink',
   },
   {
+    order:       110,
     title:       'Linear Regression Star Types',
     description: 'Beginner-friendly linear regression project using star data, covering OLS, gradient descent, SGD, Ridge, Lasso, and Elastic Net.',
     tags:        ['ML', 'Linear Regression', 'Data Science'],
@@ -121,6 +132,7 @@ const finished = [
     accent:      'emerald',
   },
   {
+    order:       80,
     title:       'Physics Motion',
     description: 'A fun hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall.',
     tags:        ['Python', 'Physics', 'Simulation'],
@@ -131,6 +143,7 @@ const finished = [
     accent:      'mint',
   },
   {
+    order:       50,
     title:       'OpenAI RAG',
     description: 'Retrieval-Augmented Generation chatbot using OpenAI embeddings and semantic search for intelligent document retrieval.',
     tags:        ['RAG', 'OpenAI', 'AI'],
@@ -141,6 +154,7 @@ const finished = [
     accent:      'purple',
   },
   {
+    order:       10,
     title:       'Friend Finder',
     description: 'A chat widget that answers questions about finding old friends online. Built for Friendsreconnected.co.uk ',
     tags:        ['RAG', 'AWS', 'FastAPI'],
@@ -150,6 +164,7 @@ const finished = [
     accent:      'pink',
   },
   {
+    order:       60,
     title:       'Expression Detection',
     description: 'Real-time facial expression detection using dlib facial landmarks for emotion recognition.',
     tags:        ['Computer Vision', 'ML', 'dlib'],
@@ -160,6 +175,8 @@ const finished = [
     accent:      'pink',
   },
 ] as const;
+
+const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
 ---
 
 <!doctype html>
@@ -234,7 +251,7 @@ const finished = [
         <div class="projects-group">
           <h2 class="section-heading">Projects that are finished <span class="hover-hint mono">— hover to preview</span></h2>
           <div class="grid">
-            {finished.map((p, i) => (
+            {finishedSorted.map((p, i) => (
               <ProjectCard
                 title={p.title}
                 description={p.description}
@@ -449,4 +466,3 @@ const finished = [
 
   cards.forEach(card => observer.observe(card));
 </script>
-
