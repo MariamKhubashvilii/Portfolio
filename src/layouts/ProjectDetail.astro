@@ -8,7 +8,7 @@ interface Props {
   title: string;
   description: string;
   tags: string[];
-  github: string;
+  github?: string;
   accent: 'purple' | 'mint' | 'pink' | 'blue' | 'amber' | 'emerald';
   liveDemo?: string;
   liveDemoLabel?: string;
@@ -119,9 +119,11 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
           </div>
 
           <div class="hero-links">
-            <a class="hero-action" href={github} target="_blank" rel="noopener noreferrer">
-              View GitHub ↗
-            </a>
+            {github && (
+              <a class="hero-action" href={github} target="_blank" rel="noopener noreferrer">
+                View GitHub ↗
+              </a>
+            )}
             {liveDemo && (
               <a class="hero-action" href={liveDemo} target="_blank" rel="noopener noreferrer">
                 {liveDemoLabel} ↗

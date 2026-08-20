@@ -24,12 +24,9 @@ const FrchatDemoImage = '/thumbnails/FR Chat Screenshot.jpeg';
 const activeDevelopment = [
   {
     title:       'SEO Writer',
-    description: 'Multi-mode article and landing page optimiser with structured templates for SEO-first writing.',
-    tags:        ['NLP', 'SEO', 'Tools'],
-    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
-    demoImage:   seoWriterThumb,
-    demo:        'https://brand-mirror-upgraded.streamlit.app/',
-    hasVideo:    true,
+    description: 'FastAPI + React rebuild of the Streamlit SEO Writer — same content-generation logic, now behind a real API with dedicated Article Writer and Landing Page Optimizer flows.',
+    tags:        ['FastAPI', 'React', 'SEO'],
+    comingSoon:  true,
     page:        '/projects/seo-writer',
     accent:      'emerald',
   },
@@ -50,6 +47,22 @@ const activeDevelopment = [
     comingSoon:  true,
     page:        '/projects/recession-playlist',
     accent:      'pink',
+  },
+  {
+    title:       'SEO Meta Tag Token/Tone Analyzer',
+    description: 'Correlates title-tag words, phrases, and tones with click-through rate using live Google Search Console data.',
+    tags:        ['Python', 'SEO', 'GSC'],
+    comingSoon:  true,
+    page:        '/projects/seo-meta-analyzer',
+    accent:      'amber',
+  },
+  {
+    title:       'SEO Audit',
+    description: 'Automated competitive SEO audit: discovers competitors, crawls both sides, flags heading errors, and surfaces keyword gaps.',
+    tags:        ['Python', 'FastAPI', 'Postgres'],
+    comingSoon:  true,
+    page:        '/projects/seo-audit',
+    accent:      'blue',
   },
 ] as const;
 
@@ -145,6 +158,18 @@ const finished = [
     hasVideo:    true,
     page:        '/projects/physics-motion',
     accent:      'mint',
+  },
+  {
+    order:       55,
+    title:       'SEO Writer (Streamlit)',
+    description: 'Archived Streamlit version of SEO Writer — multi-mode article and landing page optimiser, superseded by a FastAPI + React rebuild.',
+    tags:        ['NLP', 'SEO', 'Streamlit'],
+    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
+    demoImage:   seoWriterThumb,
+    demo:        'https://brand-mirror-upgraded.streamlit.app/',
+    hasVideo:    true,
+    page:        '/projects/seo-writer-streamlit',
+    accent:      'emerald',
   },
   {
     order:       50,

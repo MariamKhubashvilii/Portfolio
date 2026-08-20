@@ -1,0 +1,91 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="SEO Audit"
+  description="An automated SEO audit and outreach-prep tool: finds a site's competitors, crawls both, flags heading-structure errors, and surfaces keywords competitors rank for that the target site doesn't."
+  tags={['Python', 'FastAPI', 'Postgres', 'SEO']}
+  accent="blue"
+  comingSoon={true}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Built as a pilot for a client audit, this tool automates the first pass of a competitive SEO audit: given a target site and a keyword list, it discovers likely competitor domains, crawls all of them, checks heading hierarchy for structural errors, and flags keywords competitors cover on-page that the target doesn't. Everything lands in Postgres for querying, with a small local dashboard on top.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>End-to-end audit pipeline</strong>
+          <p>Competitor discovery, crawling, heading checks, and keyword-gap analysis in one run, from a CLI or a local dashboard.</p>
+        </div>
+        <div>
+          <strong>Private, client-facing pilot</strong>
+          <p>Built against real client data, so the code and results stay unpublished for now — no public repo or hosted demo.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Automated competitor discovery from a keyword list.</li>
+        <li>Site crawling via sitemap discovery, no headless browser.</li>
+        <li>Heading-hierarchy validation (missing or out-of-order H1–H3s).</li>
+        <li>Keyword-gap detection between a target and its competitors.</li>
+        <li>Postgres-backed storage with a local FastAPI dashboard for review.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        Given a target domain and a keyword export, the tool first tallies which competitor domains show up repeatedly for those keywords, then crawls the target and each competitor's homepage plus sitemap links. Each crawled page is checked for heading-hierarchy errors, and every keyword is checked against the target's titles, URLs, meta descriptions, and headings to flag gaps competitors already cover.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Load keywords from CSV or database</li>
+            <li>Auto-discover competitor domains</li>
+            <li>Crawl target and competitor sitemaps</li>
+            <li>Validate heading structure per page</li>
+            <li>Flag keyword gaps vs. competitors</li>
+            <li>Persist everything to Postgres</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Review</h3>
+          <ul>
+            <li>Local FastAPI + Jinja2 dashboard, no auth needed</li>
+            <li>Browse audits by niche without hand-writing SQL</li>
+            <li>Query heading issues and keyword gaps directly</li>
+            <li>No cloud dependency — runs entirely on local Postgres</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Status: work in progress</h2>
+    <p>
+      This is an early pilot, not a finished product. Competitor discovery currently uses a free search-engine query as a stand-in for a real SERP/backlink tool, and keyword matching is plain substring matching rather than fuzzy or embedding-based. Sites that render content via JavaScript come back mostly empty since crawling is plain HTTP, not headless-browser based. All known limitations, since the code and data are private, this page describes the approach rather than linking to a repo or live demo.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Next up</strong>
+        <p>Swap competitor discovery for a real backlink/SERP export, add fuzzy keyword matching, and feed findings into an LLM call to draft outreach copy.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Prepping the first pass of a competitive SEO audit before a client outreach or content-gap conversation.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

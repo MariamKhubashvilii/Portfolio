@@ -1,0 +1,107 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="SEO Meta Tag Token/Tone Analyzer"
+  description="Pulls title-tag CTR correlations straight from Google Search Console — which words, phrases, and tones actually move click-through rate, ranked and quantified."
+  tags={['Python', 'SEO', 'GSC', 'NLP']}
+  accent="amber"
+  comingSoon={true}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Built for a client who wanted a data-backed answer to "which title tags actually get clicked?" instead of gut-feel copywriting. The tool joins Google Search Console CTR data with the site's live title tags, then measures which individual words, phrases, and tone categories correlate with higher click-through — with sample sizes attached, not just a ranked list.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Grounded in real search data</strong>
+          <p>Pulls page-level CTR directly from GSC rather than guessing at what "good" copy looks like.</p>
+        </div>
+        <div>
+          <strong>Client-specific, kept private</strong>
+          <p>Built against a real site's search data and sitemap, so the code and results stay unpublished for now.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Google Search Console API integration for page-level CTR.</li>
+        <li>Sitemap crawling and title-tag extraction with BeautifulSoup.</li>
+        <li>Unigram/bigram phrase extraction with scikit-learn.</li>
+        <li>Hand-seeded tone-category tagging (urgency, premium, value, social proof, and more).</li>
+        <li>Ranked has/doesn't-have CTR delta comparison, with sample sizes.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The pipeline fetches page-level CTR from GSC for a date window, crawls the site's sitemap to pull each page's current title tag, then extracts tokens and tone categories from those titles. For every token and tone, it splits pages into "uses it" vs. "doesn't," and compares average CTR between the two groups — surfacing which language is actually correlated with clicks, not just present in the top-performing pages.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Pipeline</h3>
+          <ul>
+            <li>Fetch page-level CTR from Google Search Console</li>
+            <li>Crawl sitemap and extract live title tags</li>
+            <li>Join GSC data with crawled tags on URL</li>
+            <li>Extract unigram/bigram tokens (CountVectorizer)</li>
+            <li>Tag titles against editable tone categories</li>
+            <li>Rank tokens and tones by CTR delta</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Tone categories</h3>
+          <ul>
+            <li>Urgency ("limited," "last chance")</li>
+            <li>Premium ("luxury," "exclusive")</li>
+            <li>Value ("affordable," "discount")</li>
+            <li>Free offer ("free shipping," "no cost")</li>
+            <li>Social proof ("bestseller," "top rated")</li>
+            <li>Quality/craft ("handmade," "authentic")</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>Status: work in progress</h2>
+      <p>
+        This is an MVP built for a specific client engagement, so the code and demo stay private for now — no public repo or hosted demo while the tool touches a live client's search data. Screenshots will go up here once there's something worth showing. Title tags only for the current version; meta descriptions are excluded since Google frequently rewrites them in the SERP, making token correlation less reliable there. No significance testing yet — v1 intentionally compares raw CTR delta and sample size, so small groups should be read with caution.
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Not built yet</h3>
+          <ul>
+            <li>GA4 integration and page/URL normalisation layer</li>
+            <li>Update-tracking DB for logging site changes over time</li>
+            <li>LLM-based root-cause analysis with human review</li>
+            <li>Stateless snapshot/report exports</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Tech stack</h3>
+          <ul>
+            <li>Python, pandas</li>
+            <li>Google Search Console API</li>
+            <li>scikit-learn (CountVectorizer)</li>
+            <li>BeautifulSoup + requests</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>
