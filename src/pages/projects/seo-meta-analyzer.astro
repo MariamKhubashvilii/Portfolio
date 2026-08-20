@@ -4,7 +4,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
 
 <ProjectDetail
   title="SEO Meta Tag Token/Tone Analyzer"
-  description="Pulls title-tag CTR correlations straight from Google Search Console — which words, phrases, and tones actually move click-through rate, ranked and quantified."
+  description="Pulls title-tag CTR correlations straight from Google Search Console: which words, phrases, and tones actually move click-through rate, ranked and quantified."
   tags={['Python', 'SEO', 'GSC', 'NLP']}
   accent="amber"
   comingSoon={true}
@@ -13,7 +13,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
     <article class="project-card summary-card">
       <h2>Project summary</h2>
       <p>
-        Built for a client who wanted a data-backed answer to "which title tags actually get clicked?" instead of gut-feel copywriting. The tool joins Google Search Console CTR data with the site's live title tags, then measures which individual words, phrases, and tone categories correlate with higher click-through — with sample sizes attached, not just a ranked list.
+        Built for a client who wanted a data-backed answer to "which title tags actually get clicked?" instead of gut-feel copywriting. The tool joins Google Search Console CTR data with the site's live title tags, then measures which individual words, phrases, and tone categories correlate with higher click-through, with sample sizes attached rather than just a ranked list.
       </p>
       <div class="summary-list">
         <div>
@@ -43,7 +43,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
     <div class="section-content">
       <h2>How it works</h2>
       <p>
-        The pipeline fetches page-level CTR from GSC for a date window, crawls the site's sitemap to pull each page's current title tag, then extracts tokens and tone categories from those titles. For every token and tone, it splits pages into "uses it" vs. "doesn't," and compares average CTR between the two groups — surfacing which language is actually correlated with clicks, not just present in the top-performing pages.
+        The pipeline fetches page-level CTR from GSC for a date window, crawls the site's sitemap to pull each page's current title tag, then extracts tokens and tone categories from those titles. For every token and tone, it splits pages into "uses it" vs. "doesn't," and compares average CTR between the two groups. This surfaces which language is actually correlated with clicks, not just present in the top-performing pages.
       </p>
 
       <div class="section-grid">
@@ -78,7 +78,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
     <div class="section-content">
       <h2>Status: work in progress</h2>
       <p>
-        This is an MVP built for a specific client engagement, so the code and demo stay private for now — no public repo or hosted demo while the tool touches a live client's search data. Screenshots will go up here once there's something worth showing. Title tags only for the current version; meta descriptions are excluded since Google frequently rewrites them in the SERP, making token correlation less reliable there. No significance testing yet — v1 intentionally compares raw CTR delta and sample size, so small groups should be read with caution.
+        This is an MVP built for a specific client engagement, so the code and demo stay private for now: no public repo or hosted demo while the tool touches a live client's search data. Screenshots will go up here once there's something worth showing. Title tags only for the current version; meta descriptions are excluded since Google frequently rewrites them in the SERP, making token correlation less reliable there. No significance testing yet: v1 intentionally compares raw CTR delta and sample size, so small groups should be read with caution.
       </p>
 
       <div class="section-grid">

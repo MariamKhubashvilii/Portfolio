@@ -21,7 +21,7 @@
     const canvas = document.getElementById('constellation') as HTMLCanvasElement;
     const ctx    = canvas.getContext('2d')!;
 
-    // Gradient cache — keyed by "ci-si", busted on resize
+    // Gradient cache, keyed by "ci-si", busted on resize
     const starGradientCache = new Map<string, CanvasGradient>();
 
     function resize() {

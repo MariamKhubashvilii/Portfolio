@@ -4,7 +4,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
 
 <ProjectDetail
   title="SEO Writer"
-  description="A FastAPI + React rebuild of the original Streamlit SEO Writer — same content-generation logic, now behind a real JSON API with a dedicated Article Writer and Landing Page Optimizer flow."
+  description="A FastAPI + React rebuild of the original Streamlit SEO Writer, with the same content-generation logic, now behind a real JSON API with a dedicated Article Writer and Landing Page Optimizer flow."
   tags={['FastAPI', 'React', 'Vite', 'NLP', 'SEO']}
   accent="emerald"
   comingSoon={true}
@@ -13,7 +13,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
     <article class="project-card summary-card">
       <h2>Project summary</h2>
       <p>
-        This is a ground-up rebuild of <a href="/projects/seo-writer-streamlit">the original Streamlit SEO Writer</a> on a real application stack: a FastAPI backend exposing a JSON API, and a Vite/React frontend in place of Streamlit widgets. The underlying content-generation logic — brand profiles, article types, prompt building — carries over unchanged; what changed is the delivery.
+        This is a ground-up rebuild of <a href="/projects/seo-writer-streamlit">the original Streamlit SEO Writer</a> on a real application stack: a FastAPI backend exposing a JSON API, and a Vite/React frontend in place of Streamlit widgets. The underlying content-generation logic (brand profiles, article types, prompt building) carries over unchanged. What changed is the delivery.
       </p>
       <div class="summary-list">
         <div>
@@ -42,7 +42,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
     <div class="section-content">
       <h2>How it works</h2>
       <p>
-        The frontend generates a session id per browser session and sends it back on every request via an <code>X-Session-Id</code> header. The backend looks up that session's in-progress state — brand knowledge, research results, drafted sections — and routes the request to the right step handler for whichever flow the user picked: Article Writer or Landing Page Optimizer.
+        The frontend generates a session id per browser session and sends it back on every request via an <code>X-Session-Id</code> header. The backend looks up that session's in-progress state (brand knowledge, research results, drafted sections) and routes the request to the right step handler for whichever flow the user picked: Article Writer or Landing Page Optimizer.
       </p>
 
       <div class="section-grid">
@@ -72,7 +72,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
   <section class="project-section project-usage">
     <h2>Status: work in progress</h2>
     <p>
-      Session state currently lives in a plain in-memory Python dict, which is fine for local, single-user development but won't survive a backend restart or run correctly with multiple workers. Swapping that for Redis or a real database is the main thing standing between this and a real deployment — the route handlers themselves won't need to change. No public repo or hosted demo yet while it's still local-only.
+      Session state currently lives in a plain in-memory Python dict, which is fine for local, single-user development but won't survive a backend restart or run correctly with multiple workers. Swapping that for Redis or a real database is the main thing standing between this and a real deployment. The route handlers themselves won't need to change. No public repo or hosted demo yet while it's still local-only.
     </p>
     <div class="usage-card">
       <div>

@@ -24,7 +24,7 @@ const FrchatDemoImage = '/thumbnails/FR Chat Screenshot.jpeg';
 const activeDevelopment = [
   {
     title:       'SEO Writer',
-    description: 'FastAPI + React rebuild of the Streamlit SEO Writer — same content-generation logic, now behind a real API with dedicated Article Writer and Landing Page Optimizer flows.',
+    description: 'FastAPI + React rebuild of the Streamlit SEO Writer, with the same content-generation logic, now behind a real API with dedicated Article Writer and Landing Page Optimizer flows.',
     tags:        ['FastAPI', 'React', 'SEO'],
     comingSoon:  true,
     page:        '/projects/seo-writer',
@@ -67,7 +67,7 @@ const activeDevelopment = [
 ] as const;
 
 // Display order on the homepage. Lower `order` shows first.
-// Numbers are spaced by 10 on purpose — to slot a new finished project in,
+// Numbers are spaced by 10 on purpose, to slot a new finished project in,
 // just give it a number between two existing ones (e.g. 25 to land between
 // 20 and 30). No need to renumber anything else.
 const finished = [
@@ -162,7 +162,7 @@ const finished = [
   {
     order:       55,
     title:       'SEO Writer (Streamlit)',
-    description: 'Archived Streamlit version of SEO Writer — multi-mode article and landing page optimiser, superseded by a FastAPI + React rebuild.',
+    description: 'Archived Streamlit version of SEO Writer: a multi-mode article and landing page optimiser, superseded by a FastAPI + React rebuild.',
     tags:        ['NLP', 'SEO', 'Streamlit'],
     github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
     demoImage:   seoWriterThumb,
@@ -214,8 +214,8 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Marie Khubashvili — ML engineering projects, data science tools, and AI experiments." />
-  <title>Projects — Marie Khubashvili</title>
+  <meta name="description" content="Marie Khubashvili: ML engineering projects, data science tools, and AI experiments." />
+  <title>Projects | Marie Khubashvili</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
 <body>
@@ -254,7 +254,7 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
     <section class="projects">
       <div class="projects-container">
         <div class="projects-group">
-          <h2 class="section-heading">Cool projects in active development <span class="hover-hint mono">— hover to preview</span></h2>
+          <h2 class="section-heading">Cool projects in active development <span class="hover-hint mono">(hover to preview)</span></h2>
           <p class="section-intro">
             Some projects I'm genuinely excited about, even if they're not finished yet. Ideas too good to sit on. <br>
             If you want to see finished ones, go ahead to the next section.
@@ -279,7 +279,7 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
         </div>
 
         <div class="projects-group">
-          <h2 class="section-heading">Projects that are finished <span class="hover-hint mono">— hover to preview</span></h2>
+          <h2 class="section-heading">Projects that are finished <span class="hover-hint mono">(hover to preview)</span></h2>
           <div class="grid">
             {finishedSorted.map((p, i) => (
               <ProjectCard
