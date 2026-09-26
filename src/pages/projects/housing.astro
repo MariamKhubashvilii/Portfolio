@@ -1,0 +1,90 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Housing Price Regression"
+  description="Beginner-friendly multiple linear regression on the Kaggle Housing dataset, from outlier removal and RFE feature selection to OLS and a VIF check."
+  tags={['ML', 'Linear Regression', 'Data Science']}
+  github="https://github.com/MariamKhubashvilii/Housing-Price-Regression"
+  accent="blue"
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        A beginner-friendly notebook that predicts house prices with multiple linear regression on the classic Kaggle Housing dataset. The goal is not the most accurate model. It is to walk through a full regression workflow step by step: cleaning, encoding, picking features, fitting, and checking the result.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Clean before fitting</strong>
+          <p>Uses boxplots to spot outliers in <code>price</code> and <code>area</code>, then removes them with the 1.5 × IQR rule.</p>
+        </div>
+        <div>
+          <strong>Statistics, not just a score</strong>
+          <p>Fits the final model with <code>statsmodels</code> OLS to read coefficients and p-values, and checks multicollinearity with VIF.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Exploratory analysis with boxplots and a pairplot.</li>
+        <li>IQR-based outlier removal.</li>
+        <li>Binary and dummy encoding of categorical columns.</li>
+        <li>RFE feature selection, OLS regression, and a VIF check.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+      <p>
+        The dataset has one row per house: price, area, bedrooms, bathrooms, stories, parking, yes/no amenities like a main road, guest room, basement, hot water heating, air conditioning and preferred area, and a furnishing status. The notebook maps the yes/no columns to 1/0, turns furnishing status into dummy columns, splits the data 70/30, scales the numeric columns with <code>MinMaxScaler</code>, and uses RFE to keep six features before fitting OLS. It then checks the residuals and scores the model with R² on the held-out test set (about 0.58).
+      </p>
+
+      <div class="section-grid">
+        <div>
+          <h3>Steps covered</h3>
+          <ul>
+            <li>EDA with boxplots</li>
+            <li>IQR outlier removal</li>
+            <li>Binary and dummy encoding</li>
+            <li>RFE feature selection</li>
+            <li>OLS via statsmodels</li>
+            <li>VIF check and test-set R²</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Features kept by RFE</h3>
+          <ul>
+            <li><code>area</code>, <code>bathrooms</code>, <code>stories</code></li>
+            <li><code>airconditioning</code>, <code>parking</code>, <code>prefarea</code></li>
+            <li><code>price</code> (target)</li>
+            <li>Dataset: Kaggle Housing dataset</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Run it</h2>
+    <p>
+      Clone the repo, download the <a href="https://www.kaggle.com/datasets/yasserh/housing-prices-dataset" target="_blank" rel="noopener noreferrer">Kaggle Housing dataset</a>, point the <code>read_csv</code> path in the notebook at the file, and run the cells top to bottom.
+    </p>
+    <div class="usage-card">
+      <div>
+        <strong>Focus</strong>
+        <p>Understanding a complete regression workflow, not building a production price predictor.</p>
+      </div>
+      <div>
+        <strong>Best for</strong>
+        <p>Students and self-learners who want to see each preprocessing and modeling step in order.</p>
+      </div>
+    </div>
+  </section>
+</ProjectDetail>

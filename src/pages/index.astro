@@ -204,6 +204,15 @@ const finished = [
     page:        '/projects/expression-detection',
     accent:      'pink',
   },
+  {
+    order:       65,
+    title:       'Housing Price Regression',
+    description: 'Beginner-friendly multiple linear regression on the Kaggle Housing dataset, from outlier removal and RFE feature selection to OLS and a VIF check.',
+    tags:        ['ML', 'Linear Regression', 'Data Science'],
+    github:      'https://github.com/MariamKhubashvilii/Housing-Price-Regression',
+    page:        '/projects/housing',
+    accent:      'blue',
+  },
 ] as const;
 
 const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
