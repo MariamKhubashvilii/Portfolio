@@ -17,6 +17,8 @@ interface Props {
   demoVideo?: string;
   demoPoster?: string;
   demoImage?: string;
+  /** Several screenshots shown as a carousel in the demo card. */
+  demoImages?: { src: string; alt: string }[];
   comingSoon?: boolean;
   visualLabel?: string;
   visualPlaceholder?: string;
@@ -32,13 +34,15 @@ const {
   demoVideo,
   demoPoster,
   demoImage,
+  demoImages = [],
   comingSoon = false,
   visualLabel = 'Project',
   visualPlaceholder = 'Live demo unavailable',
 } = Astro.props;
 
 const videoType = demoVideo?.toLowerCase().endsWith('.mov') ? 'video/quicktime' : 'video/mp4';
-const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon ? 'Demo' : visualLabel;
+const hasCarousel = demoImages.length > 0;
+const visualHeading = demoVideo ? 'Demo' : hasCarousel ? 'Screenshots' : demoImage ? 'Screenshot' : comingSoon ? 'Demo' : visualLabel;
 ---
 
 <!doctype html>
@@ -101,6 +105,25 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
                   Your browser does not support the video tag.
                 </video>
                 <button class="video-fs" aria-label="Enter full screen">Click here to see the video up close</button>
+              </div>
+            ) : hasCarousel ? (
+              <div class="carousel" data-carousel role="group" aria-roledescription="carousel" aria-label={`${title} screenshots`}>
+                <div class="carousel-track" tabindex="0">
+                  {demoImages.map((img, i) => (
+                    <figure class="slide" role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${demoImages.length}`}>
+                      <a href={img.src} target="_blank" rel="noopener noreferrer" title="Open full size">
+                        <img src={img.src} alt={img.alt} loading={i === 0 ? 'eager' : 'lazy'} />
+                      </a>
+                    </figure>
+                  ))}
+                </div>
+                {demoImages.length > 1 && (
+                  <div class="carousel-controls">
+                    <button type="button" class="car-btn" data-dir="-1" aria-label="Previous screenshot">←</button>
+                    <span class="car-count" aria-live="polite"><span data-current>1</span> / {demoImages.length}</span>
+                    <button type="button" class="car-btn" data-dir="1" aria-label="Next screenshot">→</button>
+                  </div>
+                )}
               </div>
             ) : demoImage ? (
               <div class="image-wrap">
@@ -304,6 +327,85 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     transform: translateY(-2px);
   }
 
+  /* Screenshot carousel */
+  .carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .carousel-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: var(--radius-media);
+    border: 1px solid var(--border);
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    margin: 0;
+  }
+
+  .slide a {
+    display: block;
+  }
+
+  .slide img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: contain;
+    object-position: top center;
+    /* Matches the app's own light background so wide screenshots do not show a hard edge */
+    background: #f6f5f1;
+  }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .car-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-strong);
+    background: var(--bg-raised);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .car-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+  }
+
+  .car-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .car-count {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    min-width: 4.5em;
+    text-align: center;
+  }
+
   .lightbox {
     position: fixed;
     inset: 0;
@@ -502,6 +604,50 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     }
   }
 </style>
+
+{hasCarousel && (
+  <script>
+    (function () {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      document.querySelectorAll('[data-carousel]').forEach((root) => {
+        const track = root.querySelector('.carousel-track');
+        const count = root.querySelectorAll('.slide').length;
+        const label = root.querySelector('[data-current]');
+        const buttons = root.querySelectorAll('.car-btn');
+        if (!track) return;
+
+        const index = () => Math.round(track.scrollLeft / track.clientWidth);
+
+        function sync() {
+          const i = index();
+          if (label) label.textContent = String(i + 1);
+          buttons.forEach((b) => {
+            const dir = Number(b.getAttribute('data-dir'));
+            b.disabled = (dir < 0 && i <= 0) || (dir > 0 && i >= count - 1);
+          });
+        }
+
+        function go(i) {
+          const next = Math.max(0, Math.min(count - 1, i));
+          track.scrollTo({ left: next * track.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
+        }
+
+        buttons.forEach((b) => {
+          b.addEventListener('click', () => go(index() + Number(b.getAttribute('data-dir'))));
+        });
+
+        track.addEventListener('scroll', sync, { passive: true });
+        track.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') { e.preventDefault(); go(index() + 1); }
+          if (e.key === 'ArrowLeft')  { e.preventDefault(); go(index() - 1); }
+        });
+        window.addEventListener('resize', () => go(index()));
+        sync();
+      });
+    })();
+  </script>
+)}
 
 {(demoVideo || demoImage) && (
   <script>

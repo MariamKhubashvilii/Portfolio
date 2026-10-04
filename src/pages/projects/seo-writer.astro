@@ -7,7 +7,12 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
   description="A FastAPI + React rebuild of the original Streamlit SEO Writer, with the same content-generation logic, now behind a real JSON API with a dedicated Article Writer and Landing Page Optimizer flow."
   tags={['FastAPI', 'React', 'Vite', 'NLP', 'SEO']}
   accent="emerald"
-  comingSoon={true}
+  liveDemo="https://mariam.renode.space/"
+  liveDemoLabel="Live app"
+  demoImages={[
+    { src: '/screenshots/seo-writer-1.webp', alt: 'SEO Writer research step: target keyword, location and language fields, an optional existing article to update, and a list of ranking sources to select from.' },
+    { src: '/screenshots/seo-writer-2.webp', alt: 'SEO Writer research results: search intent, content gaps, related terms to cover, and tabs for questions to answer, AI visibility tips and an entity matrix.' },
+  ]}
 >
   <section class="project-grid">
     <article class="project-card summary-card">

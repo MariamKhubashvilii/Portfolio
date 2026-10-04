@@ -14,12 +14,6 @@ const thumb = (file: string) => `/thumbnails/${file}`;
 // Projects that are still being built. Shown as a plain list.
 const inDevelopment = [
   {
-    title:       'SEO Writer',
-    description: 'FastAPI and React rebuild of the Streamlit SEO Writer, now behind a real API with separate Article Writer and Landing Page Optimizer flows.',
-    tags:        ['FastAPI', 'React', 'SEO'],
-    page:        '/projects/seo-writer',
-  },
-  {
     title:       'Physics Tutor',
     description: 'Research assistant over physics papers and textbooks. Upload PDFs or link arXiv articles and get citation-aware answers.',
     tags:        ['RAG', 'ChromaDB', 'ML'],
@@ -52,6 +46,16 @@ const inDevelopment = [
 // Numbers are spaced by 10 so a new project can slot in (e.g. 25 between 20 and 30).
 const finished = [
   {
+    order:       5,
+    featured:    true,
+    title:       'SEO Writer',
+    description: 'FastAPI and React rebuild of the Streamlit SEO Writer, now behind a real API with separate Article Writer and Landing Page Optimizer flows.',
+    tags:        ['FastAPI', 'React', 'SEO'],
+    image:       thumb('seo-writer-app.jpg'),
+    demo:        'https://mariam.renode.space/',
+    page:        '/projects/seo-writer',
+  },
+  {
     order:       10,
     featured:    true,
     title:       'Friend Finder',
@@ -74,7 +78,6 @@ const finished = [
   },
   {
     order:       40,
-    featured:    true,
     title:       'CopyLens',
     description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
     tags:        ['NLP', 'SEO', 'GPT'],
