@@ -1,6 +1,8 @@
 ---
 // Nav.astro
+const path = Astro.url.pathname;
 const links = [
+  { label: 'about',    href: '/about', external: false },
   { label: 'github',   href: 'https://github.com/MariamKhubashvilii', external: true },
 ];
 ---
@@ -12,6 +14,7 @@ const links = [
       <li>
         <a
           href={l.href}
+          aria-current={!l.external && path.startsWith(l.href) ? 'page' : undefined}
           target={l.external ? '_blank' : undefined}
           rel={l.external ? 'noopener noreferrer' : undefined}
         >
@@ -61,6 +64,7 @@ const links = [
     transition: color 0.2s;
   }
   ul a:hover { color: var(--accent); }
+  ul a[aria-current='page'] { color: var(--text); }
 
   @media (max-width: 600px) {
     nav { padding: 18px 24px; }
