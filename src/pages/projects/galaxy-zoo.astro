@@ -1,12 +1,14 @@
 ---
 import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoVideo = '/videos/galaxy-zoo-demo.mp4';
 ---
 
 <ProjectDetail
   title="Galaxy Zoo: Galaxy Morphology Classifier"
   description="Trained an image classifier on Galaxy Zoo 2 telescope images to sort galaxies into spiral, barred spiral, elliptical and merger."
   tags={['Computer Vision', 'Vertex AI', 'AutoML', 'Astronomy', 'Google Cloud']}
-  comingSoon
+  demoVideo={demoVideo}
 >
   <section class="project-grid">
     <article class="project-card summary-card">
@@ -17,7 +19,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
       <div class="summary-list">
         <div>
           <strong>Data</strong>
-          <p>About 238,000 labeled images from Galaxy Zoo 2.</p>
+          <p>239,030 labeled images from Galaxy Zoo 2: 96,458 elliptical, 95,111 spiral, 45,303 barred spiral and 2,158 merger.</p>
         </div>
         <div>
           <strong>Model</strong>
@@ -45,7 +47,7 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
         <div>
           <h3>Data preparation</h3>
           <p>
-            Downloaded and extracted 243,434 images, then joined them to the label table. About 238,000 were usable after dropping unclassifiable ones.
+            Downloaded and extracted 243,434 images, then joined them to the label table. The 239,030 that remained after dropping unclassifiable ones were used.
           </p>
         </div>
 

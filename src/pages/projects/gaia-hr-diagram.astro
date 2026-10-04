@@ -1,12 +1,14 @@
 ---
 import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const demoImage = '/screenshots/gaia-hr-diagram.webp';
 ---
 
 <ProjectDetail
   title="Gaia: Hertzsprung-Russell Diagram Clustering"
   description="Clustered about 24.8 million Gaia DR3 stars with BigQuery ML k-means to recover the structure of the Hertzsprung-Russell diagram."
   tags={['BigQuery ML', 'k-means', 'Astronomy', 'Gaia DR3', 'Python']}
-  comingSoon
+  demoImage={demoImage}
 >
   <section class="project-grid">
     <article class="project-card summary-card">
