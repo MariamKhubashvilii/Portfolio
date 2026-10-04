@@ -1,0 +1,105 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Two-Tower Recommendation System"
+  description="A two-tower retrieval model trained on MovieLens-1M with in-batch negative sampling, built twice (NumPy and PyTorch) and served through Vertex AI Vector Search."
+  tags={['Recommender Systems', 'NumPy', 'PyTorch', 'Vertex AI', 'Google Cloud']}
+  demoImages={[
+    { src: '/screenshots/two-tower-loss.webp', alt: 'Line chart of training loss over 50 epochs, falling from 5.56 to 4.90.' },
+    { src: '/screenshots/two-tower-recall.webp', alt: 'Bar chart of recall at 5, 10 and 20 on held-out MovieLens-1M data, showing the two-tower model about 10 times better than a random baseline.' },
+  ]}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Overview</h2>
+      <p>
+        A retrieval model with one tower embedding users and one embedding items, trained with in-batch negative sampling. Retrieval asks "what is most relevant to this user" instead of "what is this", and it has its own silent failure mode: a naive negative-sampling setup trains without errors and then retrieves badly. This project treats proving that it works as the point, not just getting a pipeline to run.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Data</strong>
+          <p>Real MovieLens-1M from GroupLens Research (University of Minnesota): 6,040 users, 3,706 movies and 1,000,209 ratings.</p>
+        </div>
+        <div>
+          <strong>Status</strong>
+          <p>Deployed to Vertex AI Vector Search and since torn down.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>Results on MovieLens-1M</h2>
+      <ul>
+        <li>Training loss fell from 5.56 to 4.90 over 50 epochs (batch size 256, 32-dimensional embeddings).</li>
+        <li><strong>Recall@5:</strong> 0.0144 against a 0.0013 random baseline, 10.7x better.</li>
+        <li><strong>Recall@10:</strong> 0.0273 against 0.0027, 10.1x better.</li>
+        <li><strong>Recall@20:</strong> 0.0533 against 0.0054, 9.9x better.</li>
+        <li>Trained on a single CPU core in under 3 minutes.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it works</h2>
+
+      <div class="section-grid">
+        <div>
+          <h3>Two towers</h3>
+          <p>
+            Each tower is a single embedding table mapping into the same 32-dimensional space. There are no hidden layers on purpose, so the technique is what is being demonstrated, not model capacity.
+          </p>
+        </div>
+
+        <div>
+          <h3>In-batch softmax loss</h3>
+          <p>
+            Every other item in a training batch acts as a negative for a given user, and the true (user, item) pair sits on the diagonal of the batch's score matrix. This is the technique behind real two-tower retrieval systems.
+          </p>
+        </div>
+
+        <div>
+          <h3>Evaluation</h3>
+          <p>
+            Recall@K against a random-retrieval baseline, with a leave-one-out split: each user's single most recent interaction, by timestamp, is held out as the test target. That leaves 994,169 interactions for training.
+          </p>
+        </div>
+
+        <div>
+          <h3>Why no GPU</h3>
+          <p>
+            Benchmarked instead of assumed. The model is embedding lookups plus one matmul per batch, so 50 epochs finishes in under 3 minutes on a CPU. The architecture does not need a GPU.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>Two implementations, cross-checked</h2>
+      <ul>
+        <li><strong>NumPy, from scratch:</strong> gradients derived and coded by hand, with no autograd, and <code>np.add.at</code> for the embedding updates so repeated indices accumulate correctly. Built first to show the algorithm is understood, not just wired up through a framework.</li>
+        <li><strong>PyTorch port:</strong> the same architecture and loss, where <code>CrossEntropyLoss</code> with <code>target = arange(batch_size)</code> is mathematically identical to the manual softmax over the diagonal. Checked against the NumPy version on identical synthetic data before touching real data: both land in the same loss range and the same recall multiple over random.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>Deployed on Google Cloud</h2>
+      <p>
+        The full path ran inside a GCP project on the free trial credit, with no billing upgrade. Cloud Shell pulled the data and ran the training. The 3,706 trained item embeddings (32 dimensions each) were exported to Cloud Storage. A Vertex AI Vector Search index was built from them with dot-product distance, matching the training objective, and deployed to an index endpoint for real-time nearest-neighbor queries. The endpoint has since been torn down, so there is no live demo.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Honest note on the numbers</h2>
+    <p>
+      A margin of about 10x over random on a real held-out target is the correctness check: a broken negative-sampling implementation lands close to the random baseline. The margin is smaller than what the same code gives on synthetic data (about 24 to 27x), which is expected because real preferences are noisier than a constructed affinity signal. The real-data figure is the one that counts.
+    </p>
+  </section>
+</ProjectDetail>
