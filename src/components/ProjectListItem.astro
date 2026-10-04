@@ -1,0 +1,70 @@
+---
+// ProjectListItem.astro: plain text entry for projects that are still in development.
+interface Props {
+  title:       string;
+  description: string;
+  tags:        readonly string[];
+  github?:     string;
+  page?:       string;
+}
+
+const { title, description, tags, github, page } = Astro.props;
+---
+
+<article class="item">
+  <h3>
+    {page ? <a class="stretched" href={page}>{title}</a> : title}
+  </h3>
+  <p>{description}</p>
+
+  <ul class="tag-list">
+    {tags.map((t) => <li class="tag">{t}</li>)}
+  </ul>
+
+  {github && (
+    <div class="links">
+      <a class="text-link" href={github} target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  )}
+</article>
+
+<style>
+  .item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 22px 0 24px;
+    border-top: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .item:focus-within {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
+    border-radius: 4px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  h3 a {
+    color: var(--text);
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    max-width: 60ch;
+  }
+
+  .links {
+    display: flex;
+    gap: 16px;
+  }
+</style>

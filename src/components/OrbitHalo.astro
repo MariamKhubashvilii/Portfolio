@@ -4,11 +4,11 @@
 // homepage cards on hover. Now it lives permanently on the project page demo card.
 // Place it as a direct child of a `position: relative` box.
 interface Props {
-  dot:  string; // planet / ring colour
-  line: string; // planet edge colour
+  dot?:  string; // planet / ring colour (defaults to the site accent)
+  line?: string; // planet edge colour
 }
 
-const { dot, line } = Astro.props;
+const { dot = '', line = '' } = Astro.props;
 ---
 
 <canvas class="orbit-halo" aria-hidden="true" data-dot={dot} data-line={line}></canvas>
@@ -38,7 +38,8 @@ const { dot, line } = Astro.props;
     const ctx = canvas.getContext('2d');
     if (!box || !ctx) return;
 
-    const glowColor = canvas.dataset.dot  || '#a78bfa';
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#f0b35c';
+    const glowColor = canvas.dataset.dot  || accent;
     const lineColor = canvas.dataset.line || glowColor;
 
     let raf: number | null = null;
@@ -61,7 +62,7 @@ const { dot, line } = Astro.props;
       const h = box!.clientHeight;
       const r = Math.min(w, h) * 0.22;
       return {
-        cx: PAD + w - w * 0.08,
+        cx: PAD + w - w * 0.12,
         cy: PAD + h * 0.04,
         rx: r,
         ry: r * 0.42,

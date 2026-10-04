@@ -3,120 +3,85 @@ import StarField          from '../components/StarField.astro';
 import ConstellationCanvas from '../components/ConstellationCanvas.astro';
 import Nav                from '../components/Nav.astro';
 import ProjectCard        from '../components/ProjectCard.astro';
+import ProjectRow         from '../components/ProjectRow.astro';
+import ProjectListItem    from '../components/ProjectListItem.astro';
 import SolarSystem        from '../components/SolarSystem.astro';
 import '../styles/global.css';
 
 // Lightweight thumbnails for the homepage; full videos live on each project page.
-const seoWriterThumb = '/thumbnails/seo-writer.jpg';
-const springThumb = '/thumbnails/physics-spring.jpg';
-const copylensThumb = '/thumbnails/copylens.jpg';
-const wemoCheckThumb = '/thumbnails/wemo-check.jpg';
-const aptrankNycThumb = '/thumbnails/aptrank-nyc.jpg';
-const physicsMotionThumb = '/thumbnails/physics-motion.jpg';
-const openaiRagThumb = '/thumbnails/openai-rag.jpg';
-const expressionDetectionThumb = '/thumbnails/expression-detection.jpg';
-const linearRegressionDemoImage = '/thumbnails/linear-regression-stars.jpg';
-const automatedGscDemoImage = '/thumbnails/automated-gsc.jpg';
-const superstoreDemoImage = '/thumbnails/superstore-profitability.jpg';
-const physicsRagDemoImage = '/thumbnails/physics-rag.jpg';
-const FrchatDemoImage = '/thumbnails/FR Chat Screenshot.jpeg';
+const thumb = (file: string) => `/thumbnails/${file}`;
 
-const activeDevelopment = [
+// Projects that are still being built. Shown as a plain list.
+const inDevelopment = [
   {
     title:       'SEO Writer',
-    description: 'FastAPI + React rebuild of the Streamlit SEO Writer, with the same content-generation logic, now behind a real API with dedicated Article Writer and Landing Page Optimizer flows.',
+    description: 'FastAPI and React rebuild of the Streamlit SEO Writer, now behind a real API with separate Article Writer and Landing Page Optimizer flows.',
     tags:        ['FastAPI', 'React', 'SEO'],
-    comingSoon:  true,
     page:        '/projects/seo-writer',
-    accent:      'emerald',
   },
   {
     title:       'Physics Tutor',
     description: 'Research assistant over physics papers and textbooks. Upload PDFs or link arXiv articles and get citation-aware answers.',
     tags:        ['RAG', 'ChromaDB', 'ML'],
     github:      'https://github.com/MariamKhubashvilii/Physics-Chatbot',
-    demoImage:   physicsRagDemoImage,
     page:        '/projects/physics-rag',
-    accent:      'blue',
   },
   {
     title:       'Recession Playlist',
     description: 'Correlating Spotify audio features with macroeconomic indicators to study music and economic trends.',
     tags:        ['Data Science', 'Spotify', 'FRED'],
     github:      'https://github.com/MariamKhubashvilii/music-economy',
-    comingSoon:  true,
     page:        '/projects/recession-playlist',
-    accent:      'pink',
   },
   {
     title:       'SEO Meta Tag Token/Tone Analyzer',
     description: 'Correlates title-tag words, phrases, and tones with click-through rate using live Google Search Console data.',
     tags:        ['Python', 'SEO', 'GSC'],
-    comingSoon:  true,
     page:        '/projects/seo-meta-analyzer',
-    accent:      'amber',
   },
   {
     title:       'SEO Audit',
     description: 'Automated competitive SEO audit: discovers competitors, crawls both sides, flags heading errors, and surfaces keyword gaps.',
     tags:        ['Python', 'FastAPI', 'Postgres'],
-    comingSoon:  true,
     page:        '/projects/seo-audit',
-    accent:      'blue',
   },
-] as const;
+];
 
-// Display order on the homepage. Lower `order` shows first.
-// Numbers are spaced by 10 on purpose, to slot a new finished project in,
-// just give it a number between two existing ones (e.g. 25 to land between
-// 20 and 30). No need to renumber anything else.
+// Finished projects. `featured: true` puts a project in "Selected work" (first one is shown large).
+// The rest appear under "More projects", sorted by `order` (lower shows first).
+// Numbers are spaced by 10 so a new project can slot in (e.g. 25 between 20 and 30).
 const finished = [
   {
-    order:       40,
-    title:       'CopyLens',
-    description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
-    tags:        ['NLP', 'SEO', 'GPT'],
-    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror',
-    demoImage:   copylensThumb,
-    demo:        'https://brand-mirror.streamlit.app/',
-    hasVideo:    true,
-    page:        '/projects/copylens',
-    accent:      'purple',
-  },
-  {
-    order:       30,
-    title:       'Wemo Check',
-    description: 'A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather.',
-    tags:        ['ML', 'Streamlit', 'Anthropic'],
-    github:      'https://github.com/MariamKhubashvilii/Wemo-Check',
-    demoImage:   wemoCheckThumb,
-    demo:        'https://wemocheck.streamlit.app/',
-    hasVideo:    true,
-    page:        '/projects/wemo-check',
-    accent:      'mint',
-  },
-  {
-    order:       90,
-    title:       'AptRank NYC',
-    description: 'Apartment ranking tool for NYC that scores units across transit, price, and neighbourhood factors.',
-    tags:        ['Data', 'Python', 'Tools'],
-    github:      'https://github.com/MariamKhubashvilii/Apartment-Search',
-    demoImage:   aptrankNycThumb,
-    demo:        'https://apartment-search.streamlit.app/',
-    hasVideo:    true,
-    page:        '/projects/aptrank-nyc',
-    accent:      'amber',
+    order:       10,
+    featured:    true,
+    title:       'Friend Finder',
+    description: 'A chat widget that answers questions about finding old friends online, built for Friendsreconnected.co.uk.',
+    tags:        ['RAG', 'AWS', 'FastAPI'],
+    github:      'https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot',
+    image:       thumb('friend-finder.jpg'),
+    demo:        'https://friendsreconnected.co.uk/chat/',
+    page:        '/projects/friend-finder',
   },
   {
     order:       70,
+    featured:    true,
     title:       'Physics Spring',
     description: 'Interactive spring simulator with webcam hand tracking, live physics values, and damping visualization.',
     tags:        ['Python', 'OpenCV', 'MediaPipe'],
     github:      'https://github.com/MariamKhubashvilii/Physics-Spring',
-    demoImage:   springThumb,
-    hasVideo:    true,
+    image:       thumb('physics-spring.jpg'),
     page:        '/projects/physics-spring',
-    accent:      'purple',
+  },
+  {
+    order:       40,
+    featured:    true,
+    title:       'CopyLens',
+    description: 'Competitor copy analysis tool. Paste any URL, get a breakdown of tone, structure, and SEO signals.',
+    tags:        ['NLP', 'SEO', 'GPT'],
+    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror',
+    image:       thumb('copylens.jpg'),
+    demo:        'https://brand-mirror.streamlit.app/',
+    page:        '/projects/copylens',
   },
   {
     order:       20,
@@ -124,52 +89,18 @@ const finished = [
     description: 'A small Python tool that pulls week-over-week Google Search Console data and delivers a readable summary via email or WhatsApp.',
     tags:        ['Python', 'GSC', 'Data'],
     github:      'https://github.com/MariamKhubashvilii/Automated-GSC-Data-Overview-Message',
-    demoImage:   automatedGscDemoImage,
+    image:       thumb('automated-gsc.jpg'),
     page:        '/projects/automated-gsc',
-    accent:      'blue',
   },
   {
-    order:       100,
-    title:       'Superstore Profitability Analysis',
-    description: 'Exploratory data analysis and binary classification on the Sample Superstore dataset. Which products or states drive the most profit?',
-    tags:        ['Data Science', 'Classification', 'EDA'],
-    github:      'https://github.com/MariamKhubashvilii/Superstore-Profitability-Analysis',
-    demoImage:   superstoreDemoImage,
-    page:        '/projects/superstore-profitability',
-    accent:      'pink',
-  },
-  {
-    order:       110,
-    title:       'Linear Regression Star Types',
-    description: 'Beginner-friendly linear regression project using star data, covering OLS, gradient descent, SGD, Ridge, Lasso, and Elastic Net.',
-    tags:        ['ML', 'Linear Regression', 'Data Science'],
-    github:      'https://github.com/MariamKhubashvilii/Linear-Regression-Star-Types',
-    demoImage:   linearRegressionDemoImage,
-    page:        '/projects/linear-regression-stars',
-    accent:      'emerald',
-  },
-  {
-    order:       80,
-    title:       'Physics Motion',
-    description: 'A fun hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall.',
-    tags:        ['Python', 'Physics', 'Simulation'],
-    github:      'https://github.com/MariamKhubashvilii/Physics-Motion',
-    demoImage:   physicsMotionThumb,
-    hasVideo:    true,
-    page:        '/projects/physics-motion',
-    accent:      'mint',
-  },
-  {
-    order:       55,
-    title:       'SEO Writer (Streamlit)',
-    description: 'Archived Streamlit version of SEO Writer: a multi-mode article and landing page optimiser, superseded by a FastAPI + React rebuild.',
-    tags:        ['NLP', 'SEO', 'Streamlit'],
-    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
-    demoImage:   seoWriterThumb,
-    demo:        'https://brand-mirror-upgraded.streamlit.app/',
-    hasVideo:    true,
-    page:        '/projects/seo-writer-streamlit',
-    accent:      'emerald',
+    order:       30,
+    title:       'Wemo Check',
+    description: 'A local Streamlit app that manages your wardrobe and suggests outfits based on vibes and weather.',
+    tags:        ['ML', 'Streamlit', 'Anthropic'],
+    github:      'https://github.com/MariamKhubashvilii/Wemo-Check',
+    image:       thumb('wemo-check.jpg'),
+    demo:        'https://wemocheck.streamlit.app/',
+    page:        '/projects/wemo-check',
   },
   {
     order:       50,
@@ -177,21 +108,18 @@ const finished = [
     description: 'Retrieval-Augmented Generation chatbot using OpenAI embeddings and semantic search for intelligent document retrieval.',
     tags:        ['RAG', 'OpenAI', 'AI'],
     github:      'https://github.com/MariamKhubashvilii/openai-rag',
-    demoImage:   openaiRagThumb,
-    hasVideo:    true,
+    image:       thumb('openai-rag.jpg'),
     page:        '/projects/openai-rag',
-    accent:      'purple',
   },
   {
-    order:       10,
-    title:       'Friend Finder',
-    description: 'A chat widget that answers questions about finding old friends online. Built for Friendsreconnected.co.uk ',
-    tags:        ['RAG', 'AWS', 'FastAPI'],
-    github:      'https://github.com/MariamKhubashvilii/Friends-Reconnected-Chatbot',
-    demoImage:   FrchatDemoImage,
-    demo:        'https://friendsreconnected.co.uk/chat/',
-    page:        '/projects/friend-finder',
-    accent:      'pink',
+    order:       55,
+    title:       'SEO Writer (Streamlit)',
+    description: 'Archived Streamlit version of SEO Writer: a multi-mode article and landing page optimiser, superseded by a FastAPI and React rebuild.',
+    tags:        ['NLP', 'SEO', 'Streamlit'],
+    github:      'https://github.com/MariamKhubashvilii/Brand-Mirror-Upgraded',
+    image:       thumb('seo-writer.jpg'),
+    demo:        'https://brand-mirror-upgraded.streamlit.app/',
+    page:        '/projects/seo-writer-streamlit',
   },
   {
     order:       60,
@@ -199,23 +127,59 @@ const finished = [
     description: 'Real-time facial expression detection using dlib facial landmarks for emotion recognition.',
     tags:        ['Computer Vision', 'ML', 'dlib'],
     github:      'https://github.com/MariamKhubashvilii/expression-detection',
-    demoImage:   expressionDetectionThumb,
-    hasVideo:    true,
+    image:       thumb('expression-detection.jpg'),
     page:        '/projects/expression-detection',
-    accent:      'pink',
   },
   {
     order:       65,
     title:       'Housing Price Regression',
-    description: 'Beginner-friendly multiple linear regression on the Kaggle Housing dataset, from outlier removal and RFE feature selection to OLS and a VIF check.',
+    description: 'Multiple linear regression on the Kaggle Housing dataset, from outlier removal and RFE feature selection to OLS and a VIF check.',
     tags:        ['ML', 'Linear Regression', 'Data Science'],
     github:      'https://github.com/MariamKhubashvilii/Housing-Price-Regression',
     page:        '/projects/housing',
-    accent:      'blue',
   },
-] as const;
+  {
+    order:       80,
+    title:       'Physics Motion',
+    description: 'A hand-controlled physics simulator that lets you create, grab, throw, and delete objects in real time. Focuses on motion and free fall.',
+    tags:        ['Python', 'Physics', 'Simulation'],
+    github:      'https://github.com/MariamKhubashvilii/Physics-Motion',
+    image:       thumb('physics-motion.jpg'),
+    page:        '/projects/physics-motion',
+  },
+  {
+    order:       90,
+    title:       'AptRank NYC',
+    description: 'Apartment ranking tool for NYC that scores units across transit, price, and neighbourhood factors.',
+    tags:        ['Data', 'Python', 'Tools'],
+    github:      'https://github.com/MariamKhubashvilii/Apartment-Search',
+    image:       thumb('aptrank-nyc.jpg'),
+    demo:        'https://apartment-search.streamlit.app/',
+    page:        '/projects/aptrank-nyc',
+  },
+  {
+    order:       100,
+    title:       'Superstore Profitability Analysis',
+    description: 'Exploratory data analysis and binary classification on the Sample Superstore dataset. Which products or states drive the most profit?',
+    tags:        ['Data Science', 'Classification', 'EDA'],
+    github:      'https://github.com/MariamKhubashvilii/Superstore-Profitability-Analysis',
+    image:       thumb('superstore-profitability.jpg'),
+    page:        '/projects/superstore-profitability',
+  },
+  {
+    order:       110,
+    title:       'Linear Regression Star Types',
+    description: 'Linear regression on star data, covering OLS, gradient descent, SGD, Ridge, Lasso, and Elastic Net.',
+    tags:        ['ML', 'Linear Regression', 'Data Science'],
+    github:      'https://github.com/MariamKhubashvilii/Linear-Regression-Star-Types',
+    image:       thumb('linear-regression-stars.jpg'),
+    page:        '/projects/linear-regression-stars',
+  },
+];
 
-const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
+const sorted = [...finished].sort((a, b) => a.order - b.order);
+const featured = sorted.filter((p) => p.featured);
+const more = sorted.filter((p) => !p.featured);
 ---
 
 <!doctype html>
@@ -223,9 +187,10 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Marie Khubashvili: ML engineering projects, data science tools, and AI experiments." />
-  <title>Projects | Marie Khubashvili</title>
+  <meta name="description" content="Marie Khubashvili: AI engineer building RAG systems, ML tools, and physics simulations." />
+  <title>Marie Khubashvili | Projects</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preload" href="/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body>
   <StarField />
@@ -236,88 +201,74 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
     <section class="hero">
       <div class="hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow mono">// projects</span>
-          <h1>
-            What I've built<br>
-            <span class="gradient">and found interesting</span>
-          </h1>
+          <h1>Marie Khubashvili</h1>
           <p class="hero-sub">
-            ML tools, data experiments, and web apps.<br>
-            Some deployed. Some living in notebooks. <br>
-            I designed and built this site from scratch. <br>
-            Hope the visuals make you stay a little longer. <br>
+            AI engineer and physics student. I build RAG systems, ML tools, and physics simulations.
           </p>
-          <a
-            href="https://github.com/MariamKhubashvilii"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="github-link mono"
-          >
-            github.com/MariamKhubashvilii ↗
-          </a>
         </div>
         <SolarSystem />
       </div>
     </section>
 
-    <section class="projects">
-      <div class="projects-container">
-        <div class="projects-group">
-          <h2 class="section-heading">Cool projects in active development</h2>
-          <p class="section-intro">
-            Some projects I'm genuinely excited about, even if they're not finished yet. Ideas too good to sit on. <br>
-            If you want to see finished ones, go ahead to the next section.
-          </p>
-          <div class="grid">
-            {activeDevelopment.map((p, i) => (
+    <div class="content">
+      <section class="block" aria-labelledby="selected-work">
+        <h2 id="selected-work">Selected work</h2>
+        <div class="featured">
+          {featured.map((p, i) => (
+            <div class:list={['featured-item', { first: i === 0 }]}>
               <ProjectCard
                 title={p.title}
                 description={p.description}
-                tags={[...p.tags]}
+                tags={p.tags}
                 github={p.github}
                 demo={p.demo}
-                hasVideo={p.hasVideo}
-                demoImage={p.demoImage}
-                comingSoon={p.comingSoon}
+                image={p.image}
                 page={p.page}
-                accent={p.accent}
-                index={i}
+                large={i === 0}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+      </section>
 
-        <div class="projects-group">
-          <h2 class="section-heading">Projects that are finished</h2>
-          <div class="grid">
-            {finishedSorted.map((p, i) => (
-              <ProjectCard
-                title={p.title}
-                description={p.description}
-                tags={[...p.tags]}
-                github={p.github}
-                demo={p.demo}
-                hasVideo={p.hasVideo}
-                demoImage={p.demoImage}
-                comingSoon={p.comingSoon}
-                page={p.page}
-                accent={p.accent}
-                index={i + activeDevelopment.length}
-              />
-            ))}
-          </div>
+      <section class="block" aria-labelledby="more-projects">
+        <h2 id="more-projects">More projects</h2>
+        <div class="rows">
+          {more.map((p) => (
+            <ProjectRow
+              title={p.title}
+              description={p.description}
+              tags={p.tags}
+              github={p.github}
+              demo={p.demo}
+              image={p.image}
+              page={p.page}
+            />
+          ))}
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section class="block" aria-labelledby="in-development">
+        <h2 id="in-development">In development</h2>
+        <div class="list">
+          {inDevelopment.map((p) => (
+            <ProjectListItem
+              title={p.title}
+              description={p.description}
+              tags={p.tags}
+              github={p.github}
+              page={p.page}
+            />
+          ))}
+        </div>
+      </section>
+    </div>
 
     <footer>
       <span class="mono">marie.dev</span>
-      <span class="foot-links">
-        <a href="https://github.com/MariamKhubashvilii" target="_blank" rel="noopener noreferrer">github</a>
-      </span>
+      <a href="https://github.com/MariamKhubashvilii" target="_blank" rel="noopener noreferrer">GitHub</a>
     </footer>
   </main>
-
 </body>
 </html>
 
@@ -325,11 +276,11 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
   main {
     position: relative;
     z-index: 2;
-    padding-top: 88px;
+    padding-top: 72px;
   }
 
   .hero {
-    padding: 80px 48px 64px;
+    padding: 56px 48px 72px;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
@@ -337,160 +288,122 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
 
   .hero-grid {
     display: grid;
-    gap: 44px;
+    gap: 40px;
   }
 
   @media (min-width: 960px) {
     .hero-grid {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-      gap: 80px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 64px;
       align-items: center;
     }
   }
 
   .hero-copy {
-    max-width: 680px;
-  }
-
-  .eyebrow {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    color: var(--mint);
-    margin-bottom: 20px;
-    opacity: 0.8;
+    max-width: 560px;
   }
 
   h1 {
-    font-size: clamp(40px, 6vw, 64px);
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    font-size: clamp(40px, 6vw, 68px);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
     margin-bottom: 20px;
   }
 
-  .gradient {
-    background: linear-gradient(120deg, var(--purple) 0%, var(--mint) 55%, var(--pink) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
   .hero-sub {
-    font-size: 17px;
+    font-size: clamp(17px, 2vw, 20px);
+    line-height: 1.55;
     color: var(--text-dim);
-    line-height: 1.75;
-    margin-bottom: 28px;
+    max-width: 30em;
   }
 
-  .github-link {
-    font-size: 12px;
-    color: var(--purple);
-    letter-spacing: 0.04em;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    display: inline-block;
-  }
-  .github-link:hover { opacity: 1; }
-
-  .projects {
-    padding: 0 48px 80px;
-  }
-
-  .projects-container {
+  .content {
+    width: 100%;
     max-width: 1400px;
     margin: 0 auto;
+    padding: 0 48px 96px;
   }
 
-  .projects-group {
-    margin-bottom: 60px;
+  .block {
+    margin-bottom: 96px;
   }
 
-  .projects-group:last-child {
+  .block:last-child {
     margin-bottom: 0;
   }
 
-  .section-heading {
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 500;
+  h2 {
+    font-size: clamp(26px, 3.4vw, 36px);
+    font-weight: 600;
     line-height: 1.1;
-    letter-spacing: -0.02em;
-    margin-bottom: 28px;
-    color: var(--text);
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
   }
 
-  .section-heading:has(+ .section-intro) {
-    margin-bottom: 16px;
-  }
-
-  .section-intro {
-    max-width: 680px;
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--text-dim);
-    margin-bottom: 28px;
-  }
-
-  .grid {
+  /* Selected work: one large card beside two stacked cards */
+  .featured {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .featured-item {
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .featured {
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    }
+    .featured-item.first {
+      grid-row: 1 / span 2;
+    }
+  }
+
+  /* More projects: compact two-column grid */
+  .rows {
+    display: grid;
     gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  }
+
+  /* In development: plain list in two columns */
+  .list {
+    display: grid;
+    column-gap: 48px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 900px) {
+    .list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   footer {
-    border-top: 0.5px solid var(--border);
+    border-top: 1px solid var(--border);
     padding: 28px 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: var(--mono);
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-faint);
-  }
-
-  .foot-links {
-    display: flex;
-    gap: 24px;
   }
 
   footer a {
-    color: var(--text-faint);
+    color: var(--text-dim);
     transition: color 0.2s;
   }
-  footer a:hover { color: var(--purple); }
 
+  footer a:hover {
+    color: var(--accent);
+  }
 
   @media (max-width: 700px) {
-    .hero     { padding: 48px 24px 40px; }
-    .projects { padding: 0 24px 60px; }
-    footer    { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
-    .grid     { grid-template-columns: 1fr; }
+    .hero    { padding: 40px 24px 48px; }
+    .content { padding: 0 24px 72px; }
+    .block   { margin-bottom: 72px; }
+    footer   { padding: 24px; }
   }
 </style>
-
-<script>
-  const cards = document.querySelectorAll<HTMLElement>('.project-card');
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const card  = entry.target as HTMLElement;
-        const index = Number(card.dataset.index ?? 0);
-
-        setTimeout(() => {
-          card.classList.add('visible');
-          const rect = card.getBoundingClientRect();
-          const x    = rect.left + rect.width  / 2;
-          const y    = rect.top  + rect.height / 2;
-          (window as any).registerConstellationNode?.(x, y);
-        }, index * 110);
-
-        observer.unobserve(card);
-      });
-    },
-    { threshold: 0.15 }
-  );
-
-  cards.forEach(card => observer.observe(card));
-</script>

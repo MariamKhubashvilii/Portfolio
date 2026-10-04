@@ -54,12 +54,12 @@
     if (!ctx) return;
 
     const theme = getComputedStyle(document.documentElement);
-    const sunColor = theme.getPropertyValue('--amber').trim() || '#fbbf24';
+    const sunColor = theme.getPropertyValue('--accent').trim() || '#f0b35c';
     const planetColors = [
-      theme.getPropertyValue('--mint').trim() || '#6ee7b7',
-      theme.getPropertyValue('--blue').trim() || '#60a5fa',
-      theme.getPropertyValue('--pink').trim() || '#f9a8d4',
-      theme.getPropertyValue('--purple').trim() || '#a78bfa',
+      theme.getPropertyValue('--planet-1').trim() || '#8aa0c4',
+      theme.getPropertyValue('--planet-2').trim() || '#86a8a3',
+      theme.getPropertyValue('--planet-3').trim() || '#a49bc2',
+      theme.getPropertyValue('--planet-4').trim() || '#b3a398',
     ];
     const orbitColors = planetColors.map((color) => color + '22');
 

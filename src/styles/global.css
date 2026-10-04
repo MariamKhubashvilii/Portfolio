@@ -1,21 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-latin-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/geist-latin-ext-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-latin-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/geist-mono-latin-ext-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/*
+  Design tokens
+  - One accent (the sun's amber). Everything else is neutral.
+  - Radius scale: containers 16px, media 10px, chips and buttons fully round.
+*/
 :root {
-  --bg:        #07080f;
-  --bg-card:   #0d0e1a;
-  --purple:    #a78bfa;
-  --mint:      #6ee7b7;
-  --pink:      #f9a8d4;
-  --blue:      #60a5fa;
-  --text:      #e2e4f0;
-  --text-dim:  rgba(226, 228, 240, 0.75);
-  --amber:     #fbbf24;
-  --emerald:   #34d399;
-  --text-faint: rgba(226, 228, 240, 0.22);
-  --border:    rgba(255, 255, 255, 0.07);
-  --radius:    12px;
-  --mono:      'Space Mono', monospace;
-  --sans:      'Space Grotesk', sans-serif;
+  --bg:         #07080f;
+  --bg-card:    #0c0e18;
+  --bg-raised:  #11131f;
+  --accent:     #f0b35c;
+  --accent-dim: rgba(240, 179, 92, 0.14);
+  --text:       #e8eaf2;
+  --text-dim:   rgba(232, 234, 242, 0.74);
+  --text-faint: rgba(232, 234, 242, 0.56);
+  --border:     rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Planets in the solar system illustration: quiet, desaturated */
+  --planet-1: #8aa0c4;
+  --planet-2: #86a8a3;
+  --planet-3: #a49bc2;
+  --planet-4: #b3a398;
+
+  --radius-card:  16px;
+  --radius-media: 10px;
+  --radius-pill:  999px;
+
+  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 *, *::before, *::after {
@@ -87,4 +134,54 @@ a {
 .project-detail-page .section-content li {
   line-height: 1.8;
   color: var(--text-dim);
+}
+
+/* Keyboard focus */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Shared pieces used by the project cards */
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+}
+
+/* Makes a link's whole parent card clickable. The card must be position: relative. */
+.stretched::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.text-link {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  position: relative;
+  z-index: 2;
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 4px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.text-link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
 }
