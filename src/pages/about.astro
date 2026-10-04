@@ -31,6 +31,8 @@ const glance = [
 
   <main>
     <article class="about">
+      <div class="intro">
+      <div class="intro-text">
       <h1>Physics and astronomy student building toward ML research</h1>
 
       <div class="body">
@@ -44,6 +46,12 @@ const glance = [
           I have also spent years doing SEO for startups: keyword strategy, technical audits, internal linking, traffic recovery. That work taught me to care about the unglamorous parts: checking the output, catching the silent failure, making sure a number is actually right. It is also why I build things that run for real users, like the <a href="/projects/friend-finder">RAG chatbot</a> live on a client's site, a <a href="/projects/automated-gsc">Search Console reporting tool</a>, and a <a href="/projects/seo-audit">competitor audit</a> that crawls both sites and flags what is missing.
         </p>
       </div>
+      </div>
+
+      <figure class="portrait">
+        <img src="/marie.webp" alt="Portrait of Marie Khubashvili" width="720" height="900" />
+      </figure>
+      </div>
 
       <dl class="glance" aria-label="At a glance">
         {glance.map((g) => (
@@ -55,7 +63,7 @@ const glance = [
       </dl>
 
       <p class="closing">
-        Want to build something together? Reach me on
+        Want to build something together? Reach me on{' '}
         <a href="https://github.com/MariamKhubashvilii" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
     </article>
@@ -77,9 +85,44 @@ const glance = [
 
   .about {
     width: 100%;
-    max-width: 760px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 72px 24px 96px;
+  }
+
+  .intro {
+    display: grid;
+    gap: 32px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .portrait {
+    margin: 0;
+    max-width: 240px;
+    order: -1;
+  }
+
+  .portrait img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border);
+  }
+
+  @media (min-width: 820px) {
+    .intro {
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 56px;
+      align-items: start;
+    }
+    .portrait {
+      order: 0;
+      max-width: none;
+      margin-top: 8px;
+    }
   }
 
   h1 {
@@ -115,6 +158,7 @@ const glance = [
   }
 
   .glance {
+    max-width: 760px;
     margin: 48px 0;
     border-top: 1px solid var(--border);
   }
@@ -141,6 +185,7 @@ const glance = [
   }
 
   .closing {
+    max-width: 760px;
     font-size: 17px;
     line-height: 1.7;
     color: var(--text-dim);
