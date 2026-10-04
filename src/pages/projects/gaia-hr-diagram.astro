@@ -1,0 +1,58 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Gaia: Hertzsprung-Russell Diagram Clustering"
+  description="Clustered about 24.8 million Gaia DR3 stars with BigQuery ML k-means to recover the structure of the Hertzsprung-Russell diagram."
+  tags={['BigQuery ML', 'k-means', 'Astronomy', 'Gaia DR3', 'Python']}
+  comingSoon
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>What it does</h2>
+      <p>
+        Takes two numbers per star, color (BP-RP) and absolute magnitude, and groups stars into 6 clusters with no labels. Plotted, this is a Hertzsprung-Russell diagram colored by cluster.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Scale</strong>
+          <p>About 24.8 million stars from Gaia DR3.</p>
+        </div>
+        <div>
+          <strong>Training time</strong>
+          <p>About 3 minutes inside BigQuery at this scale.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>How it was built</h2>
+      <ul>
+        <li>Absolute magnitude was computed from apparent magnitude and parallax with the distance-modulus formula.</li>
+        <li>Trained inside BigQuery with <code>CREATE MODEL</code> using k-means (6 clusters, standardized features).</li>
+        <li>Pulled the cluster assignments back and rendered the plot with matplotlib.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>The engineering story</h2>
+      <p>
+        ESA's Gaia query archive went into maintenance mid-project, and queries kept failing with generic server errors. I confirmed the outage from ESA's status page, then switched to a pre-generated public star catalog (cosmoscout/gaia-stars, 25M brightest stars) built from the same DR3 data.
+      </p>
+      <p>
+        Along the way I also fixed a pipe-delimited file, a missing BigQuery IAM role, and a column-name mismatch in the prediction query.
+      </p>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Honest limitations</h2>
+    <ul>
+      <li>The catalog has no <code>parallax_over_error</code> column, so only <code>parallax &gt; 0</code> was applied. Some distances will be noisy. A proper run would add a signal-to-noise cut.</li>
+      <li>The 6 clusters are not validated against known stellar populations, and k=6 was chosen by hand.</li>
+    </ul>
+  </section>
+</ProjectDetail>

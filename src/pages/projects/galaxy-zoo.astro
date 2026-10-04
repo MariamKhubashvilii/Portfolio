@@ -1,0 +1,82 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+---
+
+<ProjectDetail
+  title="Galaxy Zoo: Galaxy Morphology Classifier"
+  description="Trained an image classifier on Galaxy Zoo 2 telescope images to sort galaxies into spiral, barred spiral, elliptical and merger."
+  tags={['Computer Vision', 'Vertex AI', 'AutoML', 'Astronomy', 'Google Cloud']}
+  comingSoon
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>What it does</h2>
+      <p>
+        Given a photo of a galaxy from the Sloan Digital Sky Survey, the model predicts its shape. The labels come from citizen-science volunteer votes, converted into clean classes with the published Hart et al. 2016 debiased classification table.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Data</strong>
+          <p>About 238,000 labeled images from Galaxy Zoo 2.</p>
+        </div>
+        <div>
+          <strong>Model</strong>
+          <p>Vertex AI AutoML Vision, with the architecture chosen by AutoML's own search rather than hand-designed.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>Results (test split)</h2>
+      <ul>
+        <li>AUC-PR 0.857, log loss 0.263.</li>
+        <li>At the 0.5 threshold: 80% precision and 75% recall.</li>
+        <li>About 78% overall accuracy, computed from the confusion matrix.</li>
+        <li>Per class: elliptical 92%, spiral 70%, barred spiral 67%, merger 0%.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>How it was built</h2>
+
+      <div class="section-grid">
+        <div>
+          <h3>Data preparation</h3>
+          <p>
+            Downloaded and extracted 243,434 images, then joined them to the label table. About 238,000 were usable after dropping unclassifiable ones.
+          </p>
+        </div>
+
+        <div>
+          <h3>Labeling rule</h3>
+          <p>
+            The merger flag wins first, then <code>SB</code> becomes barred spiral, <code>S</code> spiral and <code>E</code> elliptical.
+          </p>
+        </div>
+
+        <div>
+          <h3>Sanity checks</h3>
+          <p>
+            The pipeline stops if the join looks broken: too few images, too few classes, or a class with fewer than 500 examples.
+          </p>
+        </div>
+
+        <div>
+          <h3>Training</h3>
+          <p>
+            Uploaded everything to Cloud Storage, created a Vertex AI image dataset, and trained with Vertex AI AutoML Vision. The split was 80/10/10, with an 80 node-hour budget and early stopping disabled.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Honest limitation</h2>
+    <p>
+      Mergers are under 1% of the data, and the model never learned to predict them. This is a class imbalance problem. The next step would be class weighting, oversampling, or collecting more merger examples.
+    </p>
+  </section>
+</ProjectDetail>
