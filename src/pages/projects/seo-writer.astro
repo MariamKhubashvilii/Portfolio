@@ -4,9 +4,8 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
 
 <ProjectDetail
   title="SEO Writer"
-  description="A FastAPI + React rebuild of the original Streamlit SEO Writer, with the same content-generation logic, now behind a real JSON API with a dedicated Article Writer and Landing Page Optimizer flow."
-  tags={['FastAPI', 'React', 'Vite', 'NLP', 'SEO']}
-  accent="emerald"
+  description="A multi-user content platform for researching, outlining and writing SEO articles and landing pages in a brand's voice."
+  tags={['FastAPI', 'Python', 'SQLAlchemy', 'Alembic', 'MariaDB', 'React', 'TypeScript', 'Vite', 'TanStack Query', 'OpenAI', 'Anthropic Claude', 'Google Search Console API']}
   liveDemo="https://mariam.renode.space/"
   liveDemoLabel="Live app"
   demoImages={[
@@ -16,78 +15,102 @@ import ProjectDetail from '../../layouts/ProjectDetail.astro';
 >
   <section class="project-grid">
     <article class="project-card summary-card">
-      <h2>Project summary</h2>
+      <h2>Overview</h2>
       <p>
-        This is a ground-up rebuild of <a href="/projects/seo-writer-streamlit">the original Streamlit SEO Writer</a> on a real application stack: a FastAPI backend exposing a JSON API, and a Vite/React frontend in place of Streamlit widgets. The underlying content-generation logic (brand profiles, article types, prompt building) carries over unchanged. What changed is the delivery.
+        SEO Writer started as a Streamlit prototype. Streamlit's rerun model caused UI bugs and its free tier hit memory limits on long research runs, so I rebuilt it as a real application: a layered FastAPI backend with a JSON API and a Vite/React/TypeScript frontend. It is now deployed and used with accounts, private brands and monthly usage limits.
       </p>
       <div class="summary-list">
         <div>
-          <strong>Two dedicated workflows</strong>
-          <p>An Article Writer flow and a Landing Page Optimizer flow, each broken into its own step components instead of one linear Streamlit script.</p>
-        </div>
-        <div>
-          <strong>Session-based, not stateless</strong>
-          <p>Research results, chosen outline, and drafted sections persist server-side per browser session as the user moves through each step.</p>
+          <strong>Status</strong>
+          <p>Live and in active development.</p>
         </div>
       </div>
     </article>
 
     <article class="project-card detail-card">
-      <h2>What this project shows</h2>
+      <h2>What it does</h2>
       <ul>
-        <li>Migrating a Streamlit prototype to a real frontend/backend split.</li>
-        <li>FastAPI routers organised by workflow (session, brands, article, landing page).</li>
-        <li>Session-scoped state passed via a request header instead of Streamlit's session state.</li>
-        <li>Reusing proven prompt and brand-profile logic across a new UI.</li>
+        <li><strong>Article Writer:</strong> research the SERP, extract evidence from competitor pages, build an outline or skeleton, plan the layout, draft section by section, and produce a final article. Supports several article types (guide, how-to, listicle, comparison, review, tutorial, why).</li>
+        <li><strong>Landing Page Optimizer:</strong> scrapes a page, detects its sections and generates per-section copy variations. Competitors come from live search.</li>
+        <li><strong>Creative mode</strong> for freer, voice-led writing.</li>
+        <li><strong>Meta titles and descriptions</strong> generated from the SERP and the brand voice.</li>
+        <li><strong>Quality check:</strong> drafts are checked against a written editorial rule set plus required keywords and banned words, with automatic revision passes.</li>
+        <li><strong>Search Console analytics dashboard</strong> per brand, with a hand-off from a finding into the writer.</li>
+        <li><strong>Word (.docx) and Markdown export,</strong> and a live progress stream while long steps run.</li>
       </ul>
     </article>
   </section>
 
   <section class="project-section">
     <div class="section-content">
-      <h2>How it works</h2>
-      <p>
-        The frontend generates a session id per browser session and sends it back on every request via an <code>X-Session-Id</code> header. The backend looks up that session's in-progress state (brand knowledge, research results, drafted sections) and routes the request to the right step handler for whichever flow the user picked: Article Writer or Landing Page Optimizer.
-      </p>
+      <h2>Architecture</h2>
 
       <div class="section-grid">
         <div>
           <h3>Backend</h3>
-          <ul>
-            <li>FastAPI app with CORS for the local Vite dev server</li>
-            <li>Routers split by concern: session, brands, article, landing page</li>
-            <li>Brand profiles selectable from a dropdown or typed freehand</li>
-            <li>User-supplied OpenAI/Anthropic keys, held only in session state</li>
-          </ul>
+          <p>
+            FastAPI, SQLAlchemy and Alembic migrations, MariaDB in production (SQLite for tests). Layered as api / services / domain / infrastructure, with pure domain rules (roles, access policies, quotas, workflow state) that are unit tested.
+          </p>
         </div>
 
         <div>
           <h3>Frontend</h3>
-          <ul>
-            <li>Vite + React, no Streamlit dependency</li>
-            <li>Mode switch between Article Writer and Landing Page Optimizer</li>
-            <li>Step components per workflow stage</li>
-            <li>Brand-knowledge panel shared across both flows</li>
-          </ul>
+          <p>
+            React 18, TypeScript, Vite, TanStack Query, React Router, Vitest. Served by a small Node server that proxies <code>/api</code> so login cookies work on one origin.
+          </p>
+        </div>
+
+        <div>
+          <h3>Model routing</h3>
+          <p>
+            Models are routed by job: GPT-4o mini for structured extraction and JSON tasks, Claude Sonnet for sustained prose and voice. Every provider call goes through a metered client, so usage is tracked per user.
+          </p>
+        </div>
+
+        <div>
+          <h3>Long-running steps</h3>
+          <p>
+            Long steps (60 to 300 seconds) run as background jobs so proxies never cut the connection. A second identical request joins the running one, so a double click cannot pay for the same work twice.
+          </p>
+        </div>
+
+        <div>
+          <h3>Workflow state</h3>
+          <p>
+            Workflow state is saved per run in the database, with a per-run lock so concurrent requests cannot overwrite each other.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="project-section project-usage">
-    <h2>Status: work in progress</h2>
-    <p>
-      Session state currently lives in a plain in-memory Python dict, which is fine for local, single-user development but won't survive a backend restart or run correctly with multiple workers. Swapping that for Redis or a real database is the main thing standing between this and a real deployment. The route handlers themselves won't need to change. No public repo or hosted demo yet while it's still local-only.
-    </p>
-    <div class="usage-card">
-      <div>
-        <strong>Focus</strong>
-        <p>Rebuilding a working prototype on infrastructure that can actually be deployed and scaled.</p>
-      </div>
-      <div>
-        <strong>Next up</strong>
-        <p>Replace in-memory session storage with Redis; add real secrets management for API keys.</p>
-      </div>
+  <section class="project-section">
+    <div class="section-content">
+      <h2>Security and access</h2>
+      <ul>
+        <li>Accounts with Argon2 password hashing, cookie sessions and CSRF protection, plus login rate limiting and invite links.</li>
+        <li>Roles (owner, admin, member, analytics-only) and per-brand access (owner, editor, viewer) so brand knowledge stays private to the people it is shared with.</li>
+        <li>SSRF-guarded scraper.</li>
+        <li>Optional bring-your-own API keys, and encrypted per-brand Google keys for Search Console.</li>
+        <li>Monthly plan limits (Trial, Unlimited) on searches and model tokens, from an append-only usage ledger.</li>
+      </ul>
     </div>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>Testing and quality</h2>
+      <ul>
+        <li>27 backend test files (API flow, access control, quotas, prompt snapshots, scraper, SSRF guard, analytics), frontend component tests, ESLint, Prettier and type checking.</li>
+        <li>Offline test mode with canned model and search responses.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="project-section project-usage">
+    <h2>Current limitation</h2>
+    <p>
+      The app runs as a single worker on purpose. Run locks, the live progress stream, background jobs and the login rate limiter are in-process. Scaling beyond one worker means moving those to Redis. That is the main thing between this and a larger deployment.
+    </p>
   </section>
 </ProjectDetail>
