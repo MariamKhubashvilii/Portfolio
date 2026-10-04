@@ -2,6 +2,7 @@
 import Nav from '../components/Nav.astro';
 import StarField from '../components/StarField.astro';
 import ConstellationCanvas from '../components/ConstellationCanvas.astro';
+import OrbitHalo from '../components/OrbitHalo.astro';
 import '../styles/global.css';
 
 interface Props {
@@ -38,6 +39,8 @@ const {
 
 const accentStyles = {
   purple: {
+    dot: '#a78bfa',
+    line: 'rgba(167,139,250,0.5)',
     eyebrow: 'var(--mint)',
     pill: 'rgba(167, 139, 250, 0.1)',
     action: 'rgba(167, 139, 250, 0.12)',
@@ -46,6 +49,8 @@ const accentStyles = {
     actionText: 'var(--purple)',
   },
   mint: {
+    dot: '#6ee7b7',
+    line: 'rgba(110,231,183,0.5)',
     eyebrow: 'var(--mint)',
     pill: 'rgba(110, 231, 183, 0.1)',
     action: 'rgba(110, 231, 183, 0.12)',
@@ -54,6 +59,8 @@ const accentStyles = {
     actionText: 'var(--mint)',
   },
   pink: {
+    dot: '#f9a8d4',
+    line: 'rgba(249,168,212,0.5)',
     eyebrow: 'var(--pink)',
     pill: 'rgba(249, 168, 212, 0.1)',
     action: 'rgba(249, 168, 212, 0.12)',
@@ -62,6 +69,8 @@ const accentStyles = {
     actionText: 'var(--pink)',
   },
   blue: {
+    dot: '#60a5fa',
+    line: 'rgba(96,165,250,0.5)',
     eyebrow: 'var(--blue)',
     pill: 'rgba(96, 165, 250, 0.1)',
     action: 'rgba(96, 165, 250, 0.12)',
@@ -70,6 +79,8 @@ const accentStyles = {
     actionText: 'var(--blue)',
   },
   amber: {
+    dot: '#fbbf24',
+    line: 'rgba(251,191,36,0.5)',
     eyebrow: 'var(--amber)',
     pill: 'rgba(251, 191, 36, 0.1)',
     action: 'rgba(251, 191, 36, 0.12)',
@@ -78,6 +89,8 @@ const accentStyles = {
     actionText: 'var(--amber)',
   },
   emerald: {
+    dot: '#34d399',
+    line: 'rgba(52,211,153,0.5)',
     eyebrow: 'var(--emerald)',
     pill: 'rgba(52, 211, 153, 0.1)',
     action: 'rgba(52, 211, 153, 0.12)',
@@ -134,6 +147,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
 
         <div class="hero-visual">
           <div class="visual-card">
+            <OrbitHalo dot={c.dot} line={c.line} />
             <div class="visual-label">{visualHeading}</div>
             {demoVideo ? (
               <div class="video-wrap">
@@ -205,8 +219,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
     position: relative;
     z-index: 2;
     padding: 110px 48px 80px;
-    max-width: 1180px;
-    margin: 0 auto;
+    width: 100%;
   }
 
   .project-hero {
@@ -300,6 +313,7 @@ const visualHeading = demoVideo ? 'Demo' : demoImage ? 'Screenshot' : comingSoon
   }
 
   .visual-card {
+    position: relative;
     width: 100%;
     border-radius: 32px;
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));

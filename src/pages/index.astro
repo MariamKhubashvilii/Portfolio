@@ -263,7 +263,7 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
     <section class="projects">
       <div class="projects-container">
         <div class="projects-group">
-          <h2 class="section-heading">Cool projects in active development <span class="hover-hint mono">(hover to preview)</span></h2>
+          <h2 class="section-heading">Cool projects in active development</h2>
           <p class="section-intro">
             Some projects I'm genuinely excited about, even if they're not finished yet. Ideas too good to sit on. <br>
             If you want to see finished ones, go ahead to the next section.
@@ -288,7 +288,7 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
         </div>
 
         <div class="projects-group">
-          <h2 class="section-heading">Projects that are finished <span class="hover-hint mono">(hover to preview)</span></h2>
+          <h2 class="section-heading">Projects that are finished</h2>
           <div class="grid">
             {finishedSorted.map((p, i) => (
               <ProjectCard
@@ -459,17 +459,6 @@ const finishedSorted = [...finished].sort((a, b) => a.order - b.order);
   }
   footer a:hover { color: var(--purple); }
 
-  .hover-hint {
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    color: var(--text-dim);
-    opacity: 0.6;
-    font-weight: 400;
-  }
-
-  @media (max-width: 767px) {
-    .hover-hint { display: none; }
-  }
 
   @media (max-width: 700px) {
     .hero     { padding: 48px 24px 40px; }

@@ -2,6 +2,7 @@
 import Nav from '../../components/Nav.astro';
 import StarField from '../../components/StarField.astro';
 import ConstellationCanvas from '../../components/ConstellationCanvas.astro';
+import OrbitHalo from '../../components/OrbitHalo.astro';
 import '../../styles/global.css';
 const demoVideo = '/videos/physics-spring-demo.mp4';
 ---
@@ -52,6 +53,7 @@ const demoVideo = '/videos/physics-spring-demo.mp4';
 
         <div class="hero-visual">
           <div class="visual-card">
+            <OrbitHalo dot="#a78bfa" line="rgba(167,139,250,0.5)" />
             <div class="visual-label">Demo</div>
             <video
               class="hero-video"
@@ -161,8 +163,7 @@ const demoVideo = '/videos/physics-spring-demo.mp4';
     position: relative;
     z-index: 2;
     padding: 110px 48px 80px;
-    max-width: 1180px;
-    margin: 0 auto;
+    width: 100%;
   }
 
   .project-hero {
@@ -249,6 +250,7 @@ const demoVideo = '/videos/physics-spring-demo.mp4';
   }
 
   .visual-card {
+    position: relative;
     width: 100%;
     border-radius: 32px;
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));

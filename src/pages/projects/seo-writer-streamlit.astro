@@ -2,6 +2,7 @@
 import Nav from '../../components/Nav.astro';
 import StarField from '../../components/StarField.astro';
 import ConstellationCanvas from '../../components/ConstellationCanvas.astro';
+import OrbitHalo from '../../components/OrbitHalo.astro';
 import '../../styles/global.css';
 
 const demoVideo = '/videos/seo-writer-demo.mp4';
@@ -62,6 +63,7 @@ const demoVideo = '/videos/seo-writer-demo.mp4';
 
         <div class="hero-visual">
           <div class="visual-card">
+            <OrbitHalo dot="#34d399" line="rgba(52,211,153,0.5)" />
             <div class="visual-label">Demo</div>
             <div class="video-wrap">
               <video
@@ -174,8 +176,7 @@ const demoVideo = '/videos/seo-writer-demo.mp4';
     position: relative;
     z-index: 2;
     padding: 110px 48px 80px;
-    max-width: 1180px;
-    margin: 0 auto;
+    width: 100%;
   }
 
   .project-hero {
@@ -266,6 +267,7 @@ const demoVideo = '/videos/seo-writer-demo.mp4';
   }
 
   .visual-card {
+    position: relative;
     width: 100%;
     border-radius: 32px;
     background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));

@@ -37,12 +37,8 @@ const c = accentMap[accent];
     data-page={page}
     role={page ? 'link' : undefined}
     tabindex={page ? 0 : undefined}
-    style={`--dot: ${c.dot}; --glow: ${c.glow}; --tag-bg: ${c.tag}; --tag-border: ${c.tagBorder}; --tag-text: ${c.tagText}; --line: ${c.line};`}
+    style={`--dot: ${c.dot}; --tag-bg: ${c.tag}; --tag-border: ${c.tagBorder}; --tag-text: ${c.tagText};`}
   >
-    <div class="dot-row">
-      <span class="dot"></span>
-    </div>
-
     <div class="screenshot" aria-hidden="true">
       {demoImage ? (
         <div class="thumb-wrap">
@@ -89,7 +85,7 @@ const c = accentMap[accent];
     </div>
 
     {page && (
-      <a class="mobile-visit mono" href={page}>visit page →</a>
+      <a class="visit mono" href={page}>visit page →</a>
     )}
   </article>
 </div>
@@ -98,22 +94,6 @@ const c = accentMap[accent];
   .project-card-wrapper {
     position: relative;
     width: 100%;
-    will-change: transform;
-  }
-
-  .halo {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    z-index: 10;
-  }
-
-  .project-card-wrapper:has(.project-card:hover) .halo {
-    opacity: 1;
   }
 
   .project-card {
@@ -124,74 +104,11 @@ const c = accentMap[accent];
     position: relative;
     overflow: hidden;
     cursor: default;
-    will-change: transform;
-    transition:
-      border-color 0.3s ease,
-      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    height: 100%;
   }
 
   .project-card[data-page] {
     cursor: pointer;
-  }
-
-  .project-card[data-page]:hover {
-    border-color: var(--dot);
-  }
-
-  .project-card {
-    min-height: 140px;
-  }
-
-  .saturn-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.35s ease;
-  }
-
-  .project-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius);
-    background: radial-gradient(ellipse at 30% 20%, var(--glow), transparent 65%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-
-  .project-card:hover {
-    border-color: var(--dot);
-    transform: translateY(-5px);
-  }
-
-  .project-card:hover {
-    padding-bottom: 44px;
-  }
-
-  .project-card:hover::after {
-    opacity: 1;
-  }
-
-  .dot-row {
-    margin-bottom: 18px;
-  }
-
-  .dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--dot);
-    box-shadow: 0 0 10px var(--dot), 0 0 20px var(--dot);
-    transition: opacity 0.35s ease;
-  }
-
-  .project-card:hover .dot {
-    opacity: 0;
   }
 
   .tags {
@@ -213,15 +130,14 @@ const c = accentMap[accent];
 
   .screenshot {
     width: 100%;
-    height: 0;
+    aspect-ratio: 600 / 340;
     overflow: hidden;
-    transition: height 0.36s cubic-bezier(0.22,1,0.36,1), opacity 0.36s;
-    opacity: 0;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius: 12px;
   }
 
   .thumb-wrap {
@@ -232,14 +148,9 @@ const c = accentMap[accent];
     overflow: hidden;
   }
 
-  .project-card:hover .screenshot {
-    height: 140px;
-    opacity: 1;
-  }
-
   .screenshot .placeholder {
-    width: 88%;
-    height: 88%;
+    width: 100%;
+    height: 100%;
     border-radius: 12px;
     border: 0.5px dashed rgba(255,255,255,0.04);
     display: flex;
@@ -260,8 +171,8 @@ const c = accentMap[accent];
   }
 
   .comingsoon-thumb {
-    width: 88%;
-    height: 88%;
+    width: 100%;
+    height: 100%;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -271,10 +182,6 @@ const c = accentMap[accent];
     letter-spacing: -0.01em;
     text-align: center;
     border: 0.5px solid rgba(255,255,255,0.06);
-    background:
-      radial-gradient(ellipse at 30% 25%, rgba(167,139,250,0.16), transparent 60%),
-      radial-gradient(ellipse at 75% 80%, rgba(249,168,212,0.14), transparent 60%),
-      rgba(255,255,255,0.01);
     background-clip: padding-box;
     color: transparent;
     background-image:
@@ -305,14 +212,6 @@ const c = accentMap[accent];
     background-clip: text;
     -webkit-text-fill-color: transparent;
     box-shadow: 0 6px 18px rgba(2,6,23,0.38);
-    opacity: 0;
-    transition: opacity 0.18s ease, transform 0.12s ease;
-  }
-
-  .project-card:hover .thumb-fs,
-  .thumb-wrap:hover .thumb-fs {
-    opacity: 1;
-    transform: translateY(-2px);
   }
 
   h2 {
@@ -347,304 +246,42 @@ const c = accentMap[accent];
     opacity: 1;
   }
 
-  /* Mobile-only visit page button */
-  .mobile-visit {
-    display: none;
+  .visit {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 0.5px solid var(--dot);
+    color: var(--dot);
+    text-decoration: none;
   }
 
+  /* Touch devices and small screens: the visit button replaces the video overlay */
   @media (max-width: 767px), (hover: none) {
-    /* Kill all hover behaviour on touch devices */
-    .project-card:hover {
-      transform: none !important;
-      padding-bottom: 28px !important;
-      border-color: var(--border) !important;
-    }
-    .project-card:hover .screenshot {
-      height: 160px !important;
-      opacity: 1 !important;
-    }
-    .project-card:hover::after {
-      opacity: 0 !important;
-    }
-    .project-card:hover .dot {
-      opacity: 0 !important;
-    }
-
-    /* Always show screenshot */
-    .screenshot {
-      height: 160px;
-      opacity: 1;
-    }
-    .project-card .dot {
-      opacity: 0;
-    }
-
-    /* Hide the "click for full video" overlay; visit page button handles this */
     .thumb-fs {
       display: none;
-    }
-
-    .mobile-visit {
-      display: inline-block;
-      margin-top: 16px;
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      padding: 7px 16px;
-      border-radius: 999px;
-      border: 0.5px solid var(--dot);
-      color: var(--dot);
-      text-decoration: none;
-      opacity: 0.8;
-      transition: opacity 0.2s;
-    }
-    .mobile-visit:active {
-      opacity: 1;
     }
   }
 </style>
 
 <script>
-  if (typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches) {
-    let globalCanvas = document.getElementById('project-halo-canvas') as HTMLCanvasElement | null;
-    if (!globalCanvas) {
-      globalCanvas = document.createElement('canvas');
-      globalCanvas.id = 'project-halo-canvas';
-      Object.assign(globalCanvas.style, {
-        position: 'fixed',
-        left: '0',
-        top: '0',
-        width: '100vw',
-        height: '100vh',
-        pointerEvents: 'none',
-        zIndex: '9999',
-        opacity: '0',
-        transition: 'opacity 0.24s linear',
-      });
-      document.body.appendChild(globalCanvas);
-    }
+  // Whole card links to its project page; inner links keep their own targets.
+  document.querySelectorAll<HTMLElement>('.project-card[data-page]').forEach((card) => {
+    const pageUrl = card.dataset.page!;
 
-    const ctx = (globalCanvas as HTMLCanvasElement).getContext('2d')!;
-
-    function resizeGlobal() {
-      (globalCanvas as HTMLCanvasElement).width  = window.innerWidth * devicePixelRatio;
-      (globalCanvas as HTMLCanvasElement).height = window.innerHeight * devicePixelRatio;
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-    }
-    resizeGlobal();
-    window.addEventListener('resize', resizeGlobal);
-
-    // Typed as HTMLElement so .dataset and keyboard events work without errors
-    const cards = document.querySelectorAll<HTMLElement>('.project-card');
-    let activeCard: HTMLElement | null = null;
-    let fadingCard: HTMLElement | null = null;
-    let raf: number | null = null;
-    let angle = 0;
-    let lifting = false;
-    let liftStart = 0;
-    const liftDuration = 900;
-    let fading = false;
-    let fadeStart = 0;
-    const fadeDuration = 260;
-
-    function computeOrbitParamsForCard(cardRect: DOMRect) {
-      const w = cardRect.width;
-      const h = cardRect.height;
-      const cx = cardRect.right - w * 0.08;
-      const cy = cardRect.top + h * 0.04;
-      const r = Math.min(w, h) * 0.22;
-      return { cx, cy, rx: r, ry: r * 0.42, rot: 0.42 };
-    }
-
-    function orbitPosition(params: any, theta: number) {
-      const { cx, cy, rx, ry, rot } = params;
-      const cosT = Math.cos(theta);
-      const sinT = Math.sin(theta);
-      const x = cx + cosT * rx * Math.cos(rot) - sinT * ry * Math.sin(rot);
-      const y = cy + cosT * rx * Math.sin(rot) + sinT * ry * Math.cos(rot);
-      return { x, y };
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, (globalCanvas as HTMLCanvasElement).width, (globalCanvas as HTMLCanvasElement).height);
-
-      const renderCard = activeCard ?? fadingCard;
-
-      if (!renderCard) {
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-        return;
-      }
-
-      if (!activeCard && fading) {
-        const t = Math.min(1, (performance.now() - fadeStart) / fadeDuration);
-        (globalCanvas as HTMLCanvasElement).style.opacity = String(1 - t);
-        if (t >= 1) {
-          fading = false;
-          fadingCard = null;
-          (globalCanvas as HTMLCanvasElement).style.opacity = '0';
-          if (raf) { cancelAnimationFrame(raf); raf = null; }
-          return;
-        }
-      } else if (activeCard) {
-        (globalCanvas as HTMLCanvasElement).style.opacity = '1';
-      }
-
-      const cardRect = renderCard.getBoundingClientRect();
-      const params = computeOrbitParamsForCard(cardRect);
-
-      const glowColor = getComputedStyle(renderCard).getPropertyValue('--dot') || '#fff';
-      const lineColor = getComputedStyle(renderCard).getPropertyValue('--line') || glowColor;
-
-      ctx.save();
-      ctx.translate(params.cx, params.cy);
-      ctx.rotate(params.rot);
-      ctx.globalAlpha = 0.18;
-      for (let i = 0; i < 4; i++) {
-        const offset = (i - 1.5) * 4;
-        ctx.beginPath();
-        ctx.ellipse(
-          0, 0,
-          params.rx + offset + (Math.random() - 0.5) * 8,
-          params.ry + offset * 0.28 + (Math.random() - 0.5) * 6,
-          0, 0, Math.PI * 2
-        );
-        ctx.strokeStyle = glowColor;
-        ctx.lineWidth = 2 + Math.random() * 2;
-        ctx.stroke();
-      }
-      ctx.globalCompositeOperation = 'lighter';
-      for (let i = 0; i < 28; i++) {
-        const theta = Math.random() * Math.PI * 2;
-        const radius = params.rx + 8 + Math.random() * 18;
-        const x = Math.cos(theta) * radius;
-        const y = Math.sin(theta) * (params.ry + 4) + (Math.random() - 0.5) * 10;
-        ctx.beginPath();
-        ctx.arc(x, y, Math.random() * 1.6 + 0.5, 0, Math.PI * 2);
-        ctx.fillStyle = glowColor;
-        ctx.fill();
-      }
-      ctx.restore();
-      ctx.globalCompositeOperation = 'source-over';
-
-      const orbitPos = orbitPosition(params, angle);
-
-      let px = orbitPos.x;
-      let py = orbitPos.y;
-      if (lifting && activeCard) {
-        const dotEl = activeCard.querySelector('.dot') as HTMLElement;
-        const dotRect = dotEl.getBoundingClientRect();
-        const startX = dotRect.left + dotRect.width / 2;
-        const startY = dotRect.top + dotRect.height / 2;
-        const now = performance.now();
-        const t = Math.min(1, (now - liftStart) / liftDuration);
-        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-        px = startX + (orbitPos.x - startX) * ease;
-        py = startY + (orbitPos.y - startY) * ease;
-      }
-
-      const pr = Math.max(6, Math.min(14, Math.min(cardRect.width, cardRect.height) * 0.04));
-      const planetGrad = ctx.createRadialGradient(px - pr * 0.2, py - pr * 0.2, pr * 0.1, px, py, pr);
-      planetGrad.addColorStop(0, 'rgba(255,255,255,0.9)');
-      planetGrad.addColorStop(0.25, glowColor);
-      planetGrad.addColorStop(0.75, lineColor);
-      planetGrad.addColorStop(1, 'rgba(0,0,0,0.18)');
-      ctx.beginPath();
-      ctx.fillStyle = planetGrad;
-      ctx.shadowBlur = 16;
-      ctx.shadowColor = glowColor;
-      ctx.arc(px, py, pr, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.shadowBlur = 0;
-
-      ctx.save();
-      ctx.translate(px, py);
-      ctx.rotate(angle * 3.2);
-      ctx.strokeStyle = 'rgba(255,255,255,0.24)';
-      ctx.lineWidth = Math.max(1, pr * 0.14);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, pr * 0.78, pr * 0.3, 0, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
-
-      for (let i = 0; i < 5; i++) {
-        const loc = Math.random() * Math.PI * 2;
-        const offsetRadius = pr * 0.55 * Math.random();
-        ctx.beginPath();
-        ctx.arc(
-          px + Math.cos(loc) * offsetRadius * 0.7,
-          py + Math.sin(loc) * offsetRadius * 0.4,
-          Math.random() * (pr * 0.12) + 0.8,
-          0, Math.PI * 2
-        );
-        ctx.fillStyle = 'rgba(255,255,255,0.18)';
-        ctx.fill();
-      }
-
-      const highlight = ctx.createRadialGradient(px - pr * 0.25, py - pr * 0.25, pr * 0.08, px - pr * 0.25, py - pr * 0.25, pr * 0.55);
-      highlight.addColorStop(0, 'rgba(255,255,255,0.7)');
-      highlight.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.beginPath();
-      ctx.fillStyle = highlight;
-      ctx.arc(px - pr * 0.22, py - pr * 0.22, pr * 0.65, 0, Math.PI * 2);
-      ctx.fill();
-
-      if (!lifting) angle += 0.016;
-      else if (performance.now() - liftStart >= liftDuration) lifting = false;
-
-      raf = requestAnimationFrame(draw);
-    }
-
-    // Pause halo loop when tab is hidden, resume on return
-    let haloPaused = false;
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        haloPaused = true;
-        if (raf) { cancelAnimationFrame(raf); raf = null; }
-      } else {
-        haloPaused = false;
-        if ((activeCard || fadingCard) && !raf) draw();
-      }
+    card.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) return;
+      window.location.href = pageUrl;
     });
 
-    function onEnter(e: Event) {
-      const card = e.currentTarget as HTMLElement;
-      activeCard = card;
-      fadingCard = null;
-      fading = false;
-      lifting = true;
-      liftStart = performance.now();
-      if (!raf && !haloPaused) draw();
-    }
-
-    function onLeave() {
-      fadingCard = activeCard;
-      activeCard = null;
-      lifting = false;
-      fading = true;
-      fadeStart = performance.now();
-    }
-
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', onEnter);
-      card.addEventListener('mouseleave', onLeave);
-
-      const pageUrl = card.dataset.page;
-      if (pageUrl) {
-        card.addEventListener('click', (event) => {
-          if ((event.target as HTMLElement).closest('a')) return;
-          window.location.href = pageUrl;
-        });
-
-        card.addEventListener('keydown', (event: KeyboardEvent) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            window.location.href = pageUrl;
-          }
-        });
-
-        card.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', (event) => event.stopPropagation());
-        });
+    card.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.target !== card) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        window.location.href = pageUrl;
       }
     });
-  }
+  });
 </script>
