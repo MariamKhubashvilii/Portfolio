@@ -1,0 +1,69 @@
+---
+import ProjectDetail from '../../layouts/ProjectDetail.astro';
+
+const tools = [
+  { name: 'Time Dilation Calculator', text: 'Set a velocity, watch two clocks disagree, and see why on a spacetime diagram.' },
+  { name: 'Projectile Motion Calculator', text: 'Set a launch speed, angle, and height, and watch the parabola it produces.' },
+  { name: 'Pendulum Period Calculator', text: 'Why the period does not depend on mass, and where the small-angle formula stops being true.' },
+  { name: 'Blackbody Radiation Calculator', text: 'Set a temperature and watch the spectrum, the peak wavelength, and the perceived color update together.' },
+  { name: 'Doppler Effect Calculator', text: 'Set a source speed and frequency, and watch the pitch sweep continuously as it passes.' },
+  { name: 'Orbital Velocity Calculator', text: 'Fire a burn and watch the opposite side of the orbit rise while the burn point stays put.' },
+];
+---
+
+<ProjectDetail
+  title="Orion Field"
+  description="Free interactive physics tools you can drag and watch respond, not just read about. Every number is computed live and checked before it ships."
+  tags={['Physics', 'Simulation', 'Web']}
+  github="https://github.com/MariamKhubashvilii/Orion-Field"
+  liveDemo="https://orion-field.web.app/"
+  liveDemoLabel="Open Orion Field"
+  demoImages={[
+    { src: '/screenshots/orion-field-1.webp', alt: 'Orion Field time dilation calculator: a velocity slider, a Minkowski diagram with two worldlines, and readouts for the two clocks and the Lorentz factor.' },
+    { src: '/screenshots/orion-field-2.webp', alt: 'Orion Field orbital velocity calculator: a starting orbit slider, an orbit diagram drawn to scale around Earth, and prograde and radial burn controls.' },
+    { src: '/screenshots/orion-field-3.webp', alt: 'Orion Field home page: the title, the line "Physics tools you can drag and watch respond, not just read about," and the start of the tool list.' },
+  ]}
+>
+  <section class="project-grid">
+    <article class="project-card summary-card">
+      <h2>Project summary</h2>
+      <p>
+        Orion Field is a site of free physics calculators built around one idea: set a number, watch something true happen to it, then read the formula. Each tool pairs sliders with a live diagram that works as the proof, drawn as you move the slider.
+      </p>
+      <div class="summary-list">
+        <div>
+          <strong>Six tools so far</strong>
+          <p>Time dilation, projectile motion, pendulum period, blackbody radiation, the Doppler effect, and orbital velocity.</p>
+        </div>
+        <div>
+          <strong>Numbers that are actually computed</strong>
+          <p>Nothing is animated for effect. Every value is calculated live, and constants are sourced, such as Earth's mass and radius from the IERS Conventions (2010) on the orbital tool.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="project-card detail-card">
+      <h2>What this project shows</h2>
+      <ul>
+        <li>Turning physics formulas into interactive tools where the diagram is the proof.</li>
+        <li>Computing results live instead of faking them for visual effect.</li>
+        <li>Putting a worked example, the formulas, and sources next to every tool.</li>
+        <li>Drawing the site's internal link map as a constellation of the tools.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="project-section">
+    <div class="section-content">
+      <h2>The tools</h2>
+      <div class="section-grid">
+        {tools.map((t) => (
+          <div>
+            <h3>{t.name}</h3>
+            <p>{t.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</ProjectDetail>
