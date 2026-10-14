@@ -1,0 +1,370 @@
+---
+import StarField from '../components/StarField.astro';
+import ConstellationCanvas from '../components/ConstellationCanvas.astro';
+import Nav from '../components/Nav.astro';
+import '../styles/global.css';
+
+const email = 'm.khubashvili13@gmail.com';
+const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+
+const channels = [
+  { label: 'Email',    value: email, href: `mailto:${email}`, external: false },
+  { label: 'GitHub',   value: 'github.com/MariamKhubashvilii', href: 'https://github.com/MariamKhubashvilii', external: true },
+  { label: 'Based in', value: 'Tbilisi (UTC+4)', href: null, external: false },
+];
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Get in touch with Marie Khubashvili about freelance SEO, RAG pipelines, AI automation, or data science work." />
+  <title>Contact | Marie Khubashvili</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preload" href="/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+</head>
+<body>
+  <StarField />
+  <ConstellationCanvas />
+  <Nav />
+
+  <main>
+    <section class="contact">
+      <div class="intro">
+        <h1>Let's talk about your project</h1>
+        <p>
+          I take on freelance SEO strategy and reporting, RAG pipelines, and AI automation. Tell me what you are building and where you are stuck, and I will reply within a couple of working days.
+        </p>
+
+        <dl class="channels" aria-label="Contact details">
+          {channels.map((c) => (
+            <div class="channel-row">
+              <dt>{c.label}</dt>
+              <dd>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    target={c.external ? '_blank' : undefined}
+                    rel={c.external ? 'noopener noreferrer' : undefined}
+                  >{c.value}</a>
+                ) : c.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <form
+        id="contact-form"
+        class="form"
+        novalidate
+        data-access-key={accessKey}
+        data-fallback-email={email}
+      >
+        <div class="field">
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required maxlength="120" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" />
+        </div>
+
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="7" required maxlength="5000"></textarea>
+        </div>
+
+        <!-- Honeypot: real people never see or fill this -->
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="actions">
+          <button type="submit" id="submit-btn">Send message</button>
+          <p id="form-status" class="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </section>
+
+    <footer>
+      <span class="mono">marie.dev</span>
+      <a href="/">Projects</a>
+    </footer>
+  </main>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const statusEl = document.getElementById('form-status') as HTMLParagraphElement | null;
+    const btn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+    function setStatus(msg: string, kind: 'ok' | 'error' | '') {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.dataset.kind = kind;
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form || !btn) return;
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = new FormData(form);
+
+      // Honeypot filled in: pretend it worked, send nothing.
+      if (data.get('botcheck')) {
+        setStatus('Thanks, your message is on its way.', 'ok');
+        form.reset();
+        return;
+      }
+
+      const accessKey = form.dataset.accessKey;
+      const fallback = form.dataset.fallbackEmail;
+      if (!accessKey) {
+        setStatus(`The form is not set up yet. Please email ${fallback} directly.`, 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      setStatus('', '');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: accessKey,
+            subject: `New portfolio inquiry from ${data.get('name')}`,
+            from_name: 'marie.dev contact form',
+            name: data.get('name'),
+            email: data.get('email'),
+            message: data.get('message'),
+          }),
+        });
+        const json = await res.json();
+        if (res.ok && json.success) {
+          setStatus('Thanks, your message is on its way. I will reply soon.', 'ok');
+          form.reset();
+        } else {
+          throw new Error(json.message || 'Request failed');
+        }
+      } catch {
+        setStatus(`Something went wrong. Please email ${fallback} directly.`, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send message';
+      }
+    });
+  </script>
+</body>
+</html>
+
+<style>
+  main {
+    position: relative;
+    z-index: 2;
+    padding-top: 72px;
+  }
+
+  .contact {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 72px 24px 96px;
+    display: grid;
+    gap: 48px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  @media (min-width: 820px) {
+    .contact {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 72px;
+      align-items: start;
+    }
+  }
+
+  h1 {
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    max-width: 12em;
+  }
+
+  .intro p {
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--text-dim);
+    max-width: 52ch;
+  }
+
+  .channels {
+    margin-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+
+  .channel-row {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  dt {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    padding-top: 3px;
+  }
+
+  dd {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    overflow-wrap: anywhere;
+  }
+
+  dd a {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 4px;
+    transition: color 0.2s, text-decoration-color 0.2s;
+  }
+
+  dd a:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  .form {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-media);
+    padding: 12px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 160px;
+    line-height: 1.6;
+  }
+
+  input:hover,
+  textarea:hover {
+    border-color: var(--border-strong);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  button {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #07080f;
+    background: var(--accent);
+    border: 0;
+    border-radius: var(--radius-pill);
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  button:hover:not(:disabled) { opacity: 0.88; }
+  button:active:not(:disabled) { transform: translateY(1px); }
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  button:disabled { opacity: 0.55; cursor: progress; }
+
+  .status {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-dim);
+    flex: 1 1 200px;
+  }
+  .status[data-kind='ok'] { color: var(--accent); }
+  .status[data-kind='error'] { color: #e8928a; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-faint);
+  }
+
+  footer a {
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .contact { padding-top: 48px; }
+    .form { padding: 24px 20px; }
+    .channel-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    footer { padding: 24px; }
+  }
+</style>
