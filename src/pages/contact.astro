@@ -5,7 +5,14 @@ import Nav from '../components/Nav.astro';
 import '../styles/global.css';
 
 const email = 'm.khubashvili13@gmail.com';
-const accessKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+// Runs at build time only. Accepts either variable name; the key ends up in
+// the page HTML either way, which is how Web3Forms access keys are meant to be used.
+const accessKey =
+  import.meta.env.PUBLIC_WEB3FORMS_KEY ??
+  import.meta.env.WEB3FORMS_KEY ??
+  process.env.PUBLIC_WEB3FORMS_KEY ??
+  process.env.WEB3FORMS_KEY ??
+  '';
 
 const channels = [
   { label: 'Email',    value: email, href: `mailto:${email}`, external: false },
